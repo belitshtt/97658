@@ -556,13 +556,18 @@ td:hover {
             
             <div class="num-btn-container">
                 <button class="num-btn-primary" onclick="generateNumerologyDates()">
-                    <span>Tạo và sao chép kết quả</span>
+                    <span>KẾT QUẢ</span>
                 </button>
             </div>
             
             <div class="num-output-box">
                 <label for="numGeneratedDates">🔍 Kết quả :</label>
                 <textarea id="numGeneratedDates" class="num-textarea" readonly></textarea>
+            </div>
+            <div class="num-btn-container">
+                <button class="num-btn-primary" onclick="copyResult('numGeneratedDates')">
+                    <span>SAO CHÉP KẾT QUẢ</span>
+                </button>
             </div>
         </div>
 <!-- Chuyển đổi tab nămnăm -->
@@ -591,13 +596,18 @@ td:hover {
             
             <div class="num-btn-container">
                 <button class="num-btn-primary" onclick="generateNumerologyDatesYear()">
-                    <span>Tạo và sao chép kết quả</span>
+                    <span>KẾT QUẢ</span>
                 </button>
             </div>
             
             <div class="num-output-box">
                 <label for="numGeneratedDatess">🔍 Kết quả :</label>
                 <textarea id="numGeneratedDatess" class="num-textarea" readonly></textarea>
+            </div>
+            <div class="num-btn-container">
+                <button class="num-btn-primary" onclick="copyResult('numGeneratedDatess')">
+                    <span>SAO CHÉP KẾT QUẢ</span>
+                </button>
             </div>
         </div>
 
@@ -612,6 +622,44 @@ td:hover {
     </div>
 
 <script>
+   function copyResult(elementId) {
+    const text = document.getElementById(elementId).value;
+    
+    const showToast = (message, success) => {
+        const toast = document.createElement('div');
+        toast.textContent = message;
+        toast.style.position = 'fixed';
+        toast.style.bottom = '20px';
+        toast.style.left = '50%';
+        toast.style.transform = 'translateX(-50%)';
+        toast.style.padding = '10px 20px';
+        toast.style.borderRadius = '5px';
+        toast.style.backgroundColor = success ? '#4CAF50' : '#f44336';
+        toast.style.color = 'white';
+        toast.style.fontSize = '14px';
+        toast.style.zIndex = '1000';
+        document.body.appendChild(toast);
+
+        setTimeout(() => {
+            toast.style.opacity = '0';
+            setTimeout(() => {
+                document.body.removeChild(toast);
+            }, 500);
+        }, 3000);
+    };
+
+    if (text) {
+        navigator.clipboard.writeText(text).then(() => {
+            showToast('Đã sao chép kết quả vào clipboard!', true);
+        }).catch(err => {
+            console.error('Không thể sao chép kết quả: ', err);
+            showToast('Sao chép không thành công, vui lòng thử lại.', false);
+        });
+    } else {
+        showToast('Không có kết quả để sao chép.', false);
+    }
+}
+
     function showTab(tabId) {
         // Hide all tabs
         document.querySelectorAll('.tab-content').forEach(tab => {
