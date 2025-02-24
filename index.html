@@ -526,8 +526,9 @@ td:hover {
         </div> -->
 
         <div class="tab-container">
-            <button class="tab-button active" onclick="showTab('generator')">Chuyển Đổi</button>
-            <button class="tab-button" onclick="showTab('calculator')">Ngũ Hành</button>
+            <button class="tab-button active" onclick="showTab('generator')">Chuyển Đổi Xem Tháng </button>
+            <button class="tab-button" onclick="showTab('generators')">Chuyển Đổi Xem Năm </button>
+            <button class="tab-button" onclick="showTab('calculator')">TÍNH MATRIX</button>
         </div>
 
         <div id="generator" class="tab-content active">
@@ -538,30 +539,65 @@ td:hover {
                 </div>
                 
                 <div class="num-input-group">
-                    <label for="numStartMonth">📅 Tháng bắt đầu:</label>
+                    <label for="numStartMonth">📅 THÁNG MUỐN XÉT Từ tháng:</label>
                     <input type="number" id="numStartMonth" class="num-input" placeholder="Nhập tháng bắt đầu" min="1" max="12" required />
                 </div>
                 
                 <div class="num-input-group">
-                    <label for="numEndMonth">📅 Tháng kết thúc:</label>
+                    <label for="numEndMonth">📅 THÁNG MUỐN XÉT Tới tháng:</label>
                     <input type="number" id="numEndMonth" class="num-input" placeholder="Nhập tháng kết thúc" min="1" max="12" required />
                 </div>
                 
                 <div class="num-input-group">
-                    <label for="numBirthYear">📅 Năm sinh:</label>
+                    <label for="numBirthYear">📅 Năm muốn xét:</label>
                     <input type="number" id="numBirthYear" class="num-input" placeholder="Nhập năm sinh" min="1900" max="2100" required />
                 </div>
             </div>
             
             <div class="num-btn-container">
                 <button class="num-btn-primary" onclick="generateNumerologyDates()">
-                    <span>Sao chép kết quả</span>
+                    <span>Tạo và sao chép kết quả</span>
                 </button>
             </div>
             
             <div class="num-output-box">
-                <label for="numGeneratedDates">🔍 Kết quả (Sẽ tự chuyển sang tab):</label>
+                <label for="numGeneratedDates">🔍 Kết quả :</label>
                 <textarea id="numGeneratedDates" class="num-textarea" readonly></textarea>
+            </div>
+        </div>
+<!-- Chuyển đổi tab nămnăm -->
+        <div id="generators" class="tab-content">
+            <div class="num-form-container">
+                <div class="num-input-group">
+                    <label for="numBirthDates">📅 Ngày sinh:</label>
+                    <input type="number" id="numBirthDates" class="num-input" placeholder="Nhập ngày sinh" min="1" max="31" required />
+                </div>
+                
+                <div class="num-input-group">
+                    <label for="numStartMonths">📅 Tháng sinh:</label>
+                    <input type="number" id="numStartMonths" class="num-input" placeholder="Nhập tháng sinh" min="1" max="12" required />
+                </div>
+                
+                <div class="num-input-group">
+                    <label for="numStartYears">📅 NĂM MUỐN XÉT: Từ năm:</label>
+                    <input type="number" id="numStartYears" class="num-input" placeholder="Nhập năm bắt đầu" min="1900" max="2100" required />
+                </div>
+                
+                <div class="num-input-group">
+                    <label for="numEndYears">📅 NĂM MUỐN XÉT: Tới năm:</label>
+                    <input type="number" id="numEndYears" class="num-input" placeholder="Nhập năm kết thúc" min="1900" max="2100" required />
+                </div>
+            </div>
+            
+            <div class="num-btn-container">
+                <button class="num-btn-primary" onclick="generateNumerologyDatesYear()">
+                    <span>Tạo và sao chép kết quả</span>
+                </button>
+            </div>
+            
+            <div class="num-output-box">
+                <label for="numGeneratedDatess">🔍 Kết quả :</label>
+                <textarea id="numGeneratedDatess" class="num-textarea" readonly></textarea>
             </div>
         </div>
 
@@ -574,10 +610,8 @@ td:hover {
             <div id="resultContainer"></div>
         </div>
     </div>
-</body>
-</html>
 
-   <script>
+<script>
     function showTab(tabId) {
         // Hide all tabs
         document.querySelectorAll('.tab-content').forEach(tab => {
@@ -591,91 +625,89 @@ td:hover {
         document.getElementById(tabId).classList.add('active');
         document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
     }
+
+    // Hàm chuyển đổi xem tháng
     function generateNumerologyDates() {
-    const birthDate = parseInt(document.getElementById('numBirthDate').value);
-    const startMonth = parseInt(document.getElementById('numStartMonth').value);
-    const endMonth = parseInt(document.getElementById('numEndMonth').value);
-    const birthYear = parseInt(document.getElementById('numBirthYear').value);
-    
-    if (!birthDate || !startMonth || !endMonth || !birthYear) {
-        alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh!');
-        return;
-    }
-    
-    let result = '';
-    
-    for (let month = startMonth; month <= endMonth; month++) {
-        const futureDate = new Date(birthYear, month - 1, birthDate);
-        const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
+        const birthDate = parseInt(document.getElementById('numBirthDate').value);
+        const startMonth = parseInt(document.getElementById('numStartMonth').value);
+        const endMonth = parseInt(document.getElementById('numEndMonth').value);
+        const birthYear = parseInt(document.getElementById('numBirthYear').value);
         
-        if (result) {
-            result += `, ${futureFormatted}`;
-        } else {
-            result += futureFormatted;
+        if (!birthDate || !startMonth || !endMonth || !birthYear) {
+            alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh!');
+            return;
         }
-    }
-    
-    document.getElementById('numGeneratedDates').value = result;
-    document.getElementById('multiBirthDates').value = result;
-    
-    // Copy to clipboard
-    copyToClipboard(result);
-}
-    function generateDates() {
-    // Lấy giá trị từ các input fields
-    const birthDate = parseInt(document.getElementById('birthDate').value); // Ngày sinh
-    const checkStartMonth = parseInt(document.getElementById('checkStartMonth').value); // Tháng bắt đầu
-    const checkEndMonth = parseInt(document.getElementById('checkEndMonth').value); // Tháng kết thúc
-    const birthYear = parseInt(document.getElementById('birthYear').value); // Năm sinh
-    
-    // Kiểm tra dữ liệu nhập vào
-    if (!birthDate || !checkStartMonth || !checkEndMonth || !birthYear) {
-        alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh!');
-        return;
-    }
-    
-    let result = ''; // Biến chứa các ngày sẽ được tạo ra
-    
-    // Tạo ngày cho mỗi tháng từ checkStartMonth đến checkEndMonth
-    for (let month = checkStartMonth; month <= checkEndMonth; month++) {
-        const futureDate = new Date(birthYear, month - 1, birthDate); // Lưu ý: tháng trong JavaScript bắt đầu từ 0
-        const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
         
-        // Nếu đây không phải là ngày đầu tiên, thêm dấu phẩy
-        if (result) {
-            result += `, ${futureFormatted}`;
-        } else {
-            result += futureFormatted;
+        let result = '';
+        
+        for (let month = startMonth; month <= endMonth; month++) {
+            const futureDate = new Date(birthYear, month - 1, birthDate);
+            const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
+            
+            if (result) {
+                result += `, ${futureFormatted}`;
+            } else {
+                result += futureFormatted;
+            }
         }
+        
+        document.getElementById('numGeneratedDates').value = result;
+     //   document.getElementById('multiBirthDates').value = result;
+        
+        // Copy to clipboard
+        copyToClipboard(result);
     }
-    
-    // Cập nhật kết quả vào textarea
-    document.getElementById('generatedDates').value = result;
 
-    // Cập nhật kết quả vào trường multiBirthDates
-    document.getElementById('multiBirthDates').value = result;
+    // Hàm chuyển đổi xem năm
+    function generateNumerologyDatesYear() {
+        // Lấy giá trị từ các input fields
+        const birthDate = parseInt(document.getElementById('numBirthDates').value); // Ngày sinh
+        const birthMonth = parseInt(document.getElementById('numStartMonths').value); // Tháng sinh
+        const startYear = parseInt(document.getElementById('numStartYears').value); // Năm bắt đầu
+        const endYear = parseInt(document.getElementById('numEndYears').value); // Năm kết thúc
+        
+        // Kiểm tra dữ liệu nhập vào
+        if (!birthDate || !birthMonth || !startYear || !endYear) {
+            alert('Vui lòng nhập đầy đủ ngày, tháng, năm!');
+            return;
+        }
+        
+        let result = ''; // Biến chứa các ngày sẽ được tạo ra
+        
+        // Tạo ngày cho mỗi năm từ startYear đến endYear
+        for (let year = startYear; year <= endYear; year++) {
+            const futureDate = new Date(year, birthMonth - 1, birthDate); // Lưu ý: tháng trong JavaScript bắt đầu từ 0
+            const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
+            
+            // Nếu đây không phải là ngày đầu tiên, thêm dấu phẩy
+            if (result) {
+                result += `, ${futureFormatted}`;
+            } else {
+                result += futureFormatted;
+            }
+        }
+        
+        // Cập nhật kết quả vào textarea
+        document.getElementById('numGeneratedDatess').value = result;
 
-    // Sao chép kết quả vào clipboard
-    copyToClipboard(result);
-}
+        // Cập nhật kết quả vào trường multiBirthDates
+   //     document.getElementById('multiBirthDates').value = result;
 
-// Hàm sao chép vào clipboard
-function copyToClipboard(text) {
-    const textarea = document.createElement('textarea');
-    textarea.value = text;
-    document.body.appendChild(textarea);
-    textarea.select();
-    document.execCommand('copy');
-    document.body.removeChild(textarea);
-  
-}
+        // Sao chép kết quả vào clipboard
+        copyToClipboard(result);
+    }
 
-// Function to copy the result to the clipboard (as per the original code)
-
-
+    // Hàm sao chép vào clipboard
+    function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
+    }
 
     function processBirthDates() {
-        
         const input = document.getElementById('multiBirthDates').value;
         if (!input.trim()) {
             alert('Vui lòng nhập ít nhất một ngày sinh!');
@@ -692,6 +724,18 @@ function copyToClipboard(text) {
 
             const numbers = calculateNumbers(day, month, year);
 
+            // Tạo một mảng các ngũ hành và giá trị tương ứng
+            const elements = [
+                { name: "THỔ", value: numbers.tho, color: "#FF8C00" },
+                { name: "HỎA", value: numbers.hoa, color: "#FF6B6B" },
+                { name: "THỦY", value: numbers.thuy, color: "#4169E1" },
+                { name: "MỘC", value: numbers.moc, color: "#2E8B57" },
+                { name: "KIM", value: numbers.kim, color: "#FFD700" }
+            ];
+
+            // Sắp xếp mảng theo giá trị tăng dần
+            elements.sort((a, b) => a.value - b.value);
+
             const accordion = document.createElement('div');
             accordion.className = 'accordion';
 
@@ -705,41 +749,37 @@ function copyToClipboard(text) {
 
             const content = document.createElement('div');
             content.className = 'accordion-content';
-            content.innerHTML = `
+            
+            // Tạo bảng ma trận tâm lý
+            let matrixTable = `
                 <table>
                     <tr><td>${numbers[3]}</td><td>${numbers[6]}</td><td>${numbers[9]}</td></tr>
                     <tr><td>${numbers[2]}</td><td>${numbers[5]}</td><td>${numbers[8]}</td></tr>
                     <tr><td>${numbers[1]}</td><td>${numbers[4]}</td><td>${numbers[7]}</td></tr>
                 </table>
-                <table>
-                        <tr> 
-                             <td>
-                                <span class="number" style="color: #FFD700">${numbers.kim}</span>
-                                <span class="element" style="color: #FFD700">KIM</span>
-                            </td>
-                             <td>
-                                <span class="number" style="color: #2E8B57">${numbers.moc}</span>
-                                <span class="element" style="color: #2E8B57">MỘC</span>
-                            </td>
-                             <td>
-                                <span class="number" style="color: #4169E1">${numbers.thuy}</span>
-                                <span class="element" style="color: #4169E1">THỦY</span>
-                            </td>
-                            <td>
-                                <span class="number" style="color: #FF6B6B">${numbers.hoa}</span>
-                                <span class="element" style="color: #FF6B6B">HỎA</span>
-                            </td>
-                            <td>
-                                <span class="number" style="color: #FF8C00">${numbers.tho}</span>
-                                <span class="element" style="color: #FF8C00">THỔ</span>
-                            </td>
-                            
-                           
-                           
-                           
-                        </tr>
-                  </table>
             `;
+            
+            // Tạo bảng ngũ hành đã được sắp xếp từ phải sang trái (giá trị tăng dần)
+            let elementsTable = `
+                <table>
+                    <tr>`;
+            
+            // Thêm các phần tử vào bảng từ phải sang trái (mảng đảo ngược)
+            for (let i = elements.length - 1; i >= 0; i--) {
+                const element = elements[i];
+                elementsTable += `
+                    <td>
+                        <span class="number" style="color: ${element.color}">${element.value}</span>
+                        <span class="element" style="color: ${element.color}">${element.name}</span>
+                    </td>`;
+            }
+            
+            elementsTable += `
+                    </tr>
+                </table>
+            `;
+            
+            content.innerHTML = matrixTable + elementsTable;
 
             accordion.appendChild(header);
             accordion.appendChild(content);
@@ -785,4 +825,5 @@ function copyToClipboard(text) {
         };
     }
 </script>
-
+</body>
+</html>
