@@ -296,46 +296,53 @@
         document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
     }
 
-    function generateDates() {
-        const day = parseInt(document.getElementById('singleDay').value);
-        const month = parseInt(document.getElementById('singleMonth').value);
-        const year = parseInt(document.getElementById('singleYear').value);
-        
-        if (!day || !month || !year) {
-            alert('Vui lòng nhập đầy đủ ngày, tháng, năm!');
-            return;
-        }
-        
-        let result = `${day}/${month}/${year}`;
-        
-        // Current date
-        const currentDate = new Date();
-        const currentFormatted = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
-        result += `, ${currentFormatted}`;
-        
-        // Add 30 next days from the current date
-        for (let i = 1; i <= 30; i++) {
-            const nextDate = new Date(currentDate);
-            nextDate.setDate(currentDate.getDate() + i);
-            const nextFormatted = `${nextDate.getDate()}/${nextDate.getMonth() + 1}/${nextDate.getFullYear()}`;
-            result += `, ${nextFormatted}`;
-        }
-        
-        // Use current year and start from January
-        const currentYear = currentDate.getFullYear();
-        
-        // Generate dates for the next 24 months
-        for (let i = 0; i < 24; i++) {
-            const futureDate = new Date(currentYear, i, day);
-            const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
-            result += `, ${futureFormatted}`;
-        }
-        
-        document.getElementById('generatedDates').value = result;
-        
-        // Copy to clipboard automatically
-        copyToClipboard(result);
+   function generateDates() {
+    const day = parseInt(document.getElementById('singleDay').value);
+    const month = parseInt(document.getElementById('singleMonth').value);
+    const year = parseInt(document.getElementById('singleYear').value);
+    
+    if (!day || !month || !year) {
+        alert('Vui lòng nhập đầy đủ ngày, tháng, năm!');
+        return;
     }
+    
+    let result = `${day}/${month}/${year}`;
+    
+    // Current date
+    const currentDate = new Date();
+    const currentFormatted = `${currentDate.getDate()}/${currentDate.getMonth() + 1}/${currentDate.getFullYear()}`;
+    result += `, ${currentFormatted}`;
+    
+    // Add 30 next days from the current date
+    for (let i = 1; i <= 30; i++) {
+        const nextDate = new Date(currentDate);
+        nextDate.setDate(currentDate.getDate() + i);
+        const nextFormatted = `${nextDate.getDate()}/${nextDate.getMonth() + 1}/${nextDate.getFullYear()}`;
+        result += `, ${nextFormatted}`;
+    }
+    
+    // Use current year and start from January
+    const currentYear = currentDate.getFullYear();
+    
+    // Generate dates for the next 24 months
+    for (let i = 0; i < 24; i++) {
+        const futureDate = new Date(currentYear, i, day);
+        const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
+        result += `, ${futureFormatted}`;
+    }
+
+    // Add 100 dates starting from the input date with year - 1, increasing by 1 each time
+    for (let i = 0; i < 100; i++) {
+        const adjustedYear = year - 1 + i;
+        const adjustedDate = `${day}/${month}/${adjustedYear}`;
+        result += `, ${adjustedDate}`;
+    }
+    
+    document.getElementById('generatedDates').value = result;
+    
+    // Copy to clipboard automatically
+    copyToClipboard(result);
+}
 
     function copyToClipboard(text) {
         const textArea = document.createElement('textarea');
