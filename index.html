@@ -1,877 +1,892 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thần Số Học Tỉnh Thức</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
-/* Biến CSS toàn cục */
-:root {
-    --primary: #2c3e50;
-    --secondary: #3498db;
-    --accent: #e74c3c;
-    --bg: #ecf0f1;
-    --text: #2c3e50;
-    --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --transition: all 0.3s ease;
-}
+        /* Biến CSS toàn cục */
+        :root {
+            --primary: #2c3e50;
+            --secondary: #3498db;
+            --accent: #e74c3c;
+            --bg: #ecf0f1;
+            --text: #2c3e50;
+            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s ease;
+        }
 
-/* Reset và thiết lập cơ bản */
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-}
+        /* Reset và thiết lập cơ bản */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-body {
-    font-family: 'Segoe UI', Roboto, sans-serif;
-    background-color: var(--bg);
-    color: var(--text);
-    line-height: 1.6;
-    padding: 0 10px;
-}
+        body {
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 0 10px;
+        }
 
-/* Layout */
-.container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 2rem;
-}
+        /* Layout */
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
 
-/* Header */
-.header {
-    text-align: center;
-    padding: 2rem 0;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    border-radius: 15px;
-    margin-bottom: 2rem;
-    box-shadow: var(--shadow);
-}
+        /* Tab Navigation */
+        .tab-container {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
 
-.header h1 {
-    font-size: clamp(2rem, 4vw, 2.5rem);
-    margin-bottom: 1rem;
-    font-weight: 700;
-}
+        .tab-button {
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border: none;
+            border-radius: 10px;
+            background-color: white;
+            color: var(--primary);
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
 
-/* Tab Navigation */
-.tab-container {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
+        .tab-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
 
-.tab-button {
-    padding: 1rem 2rem;
-    font-size: 1.1rem;
-    border: none;
-    border-radius: 10px;
-    background-color: white;
-    color: var(--primary);
-    cursor: pointer;
-    transition: var(--transition);
-    box-shadow: var(--shadow);
-}
+        .tab-button.active {
+            background-color: var(--secondary);
+            color: white;
+        }
 
-.tab-button:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
-}
+        /* Tab Content */
+        .tab-content {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: var(--shadow);
+            display: none;
+        }
 
-.tab-button.active {
-    background-color: var(--secondary);
-    color: white;
-}
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
 
-/* Tab Content */
-.tab-content {
-    background-color: white;
-    padding: 2rem;
-    border-radius: 15px;
-    box-shadow: var(--shadow);
-    display: none;
-}
-
-.tab-content.active {
-    display: block;
-    animation: fadeIn 0.5s ease;
-}
-
-/* Form Elements */
-.input-group {
-    margin-bottom: 1.5rem;
-}
-
-.input-group label {
-    display: block;
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-    color: var(--primary);
-}
-/* Biến CSS toàn cục cho numerology */
-:root {
-    --num-primary: #2c3e50;
-    --num-secondary: #3498db;
-    --num-accent: #e74c3c;
-    --num-bg: #ecf0f1;
-    --num-text: #2c3e50;
-    --num-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    --num-transition: all 0.3s ease;
-}
-
-/* Container cho form numerology */
-.num-form-container {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-    gap: 1.5rem;
-    margin: 0 auto;
-    padding: 1rem;
-    max-width: 1200px;
-}
-
-/* Style cho nhóm input numerology */
-.num-input-group {
-    position: relative;
-    margin-bottom: 1.5rem;
-    background: white;
-    padding: 1.25rem;
-    border-radius: 12px;
-    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-    transition: var(--num-transition);
-}
-
-.num-input-group:hover {
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-    transform: translateY(-2px);
-}
-
-/* Style cho label numerology */
-.num-input-group label {
-    display: block;
-    font-weight: 600;
-    color: var(--num-primary);
-    margin-bottom: 0.75rem;
-    font-size: 1rem;
-    letter-spacing: 0.5px;
-}
-
-/* Style cho input numerology */
-.num-input {
-    width: 100%;
-    padding: 0.875rem 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: var(--num-transition);
-    background-color: #f8f9fa;
-}
-
-.num-input:focus {
-    border-color: var(--num-secondary);
-    background-color: white;
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
-}
-
-/* Nút Copy numerology */
-.num-btn-primary {
-    width: 100%;
-    padding: 1rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1rem;
-    font-weight: 600;
-    background: linear-gradient(135deg, var(--num-secondary), #2980b9);
-    color: white;
-    cursor: pointer;
-    transition: var(--num-transition);
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.num-btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
-}
-
-/* Output box numerology */
-.num-output-box {
-    margin-top: 2rem;
-    padding: 1rem;
-    border-radius: 12px;
-    background: white;
-    box-shadow: var(--num-shadow);
-}
-
-.num-output-box label {
-    display: block;
-    font-weight: 600;
-    color: var(--num-primary);
-    margin-bottom: 0.75rem;
-}
-
-.num-textarea {
-    width: 100%;
-    min-height: 100px;
-    padding: 1rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 0.95rem;
-    line-height: 1.5;
-    background-color: #f8f9fa;
-    resize: vertical;
-}
-
-/* Style cho bảng ma trận */
-.num-matrix-table {
-    width: 280px;
-    border-collapse: separate;
-    border-spacing: 0;
-    margin: 1rem auto;
-}
-
-.num-matrix-cell {
-    width: 90px;
-    height: 90px;
-    border: 1px solid #FAD3D3;
-    text-align: center;
-    font-size: 1.2rem;
-    padding: 0.5rem;
-}
-
-/* Style cho bảng ngũ hành */
-.num-elements-table {
-    width: 400px;
-    margin-top: 2rem;
-    border: 1px solid #FAD3D3;
-}
-
-.num-element-cell {
-    width: 80px;
-    height: 80px;
-    border: 1px solid #FAD3D3;
-    text-align: center;
-    position: relative;
-    padding: 0.5rem;
-}
-
-.num-element-number {
-    display: block;
-    font-size: 1.2rem;
-    margin-bottom: 0.3rem;
-}
-
-.num-element-name {
-    display: block;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-
-/* Responsive Design */
-@media (max-width: 768px) {
-    .num-form-container {
-        grid-template-columns: 1fr;
-        gap: 1rem;
-        padding: 0.5rem;
-    }
-    
-    .num-input-group {
-        padding: 1rem;
-        margin-bottom: 1rem;
-    }
-    
-    .num-matrix-table {
-        width: 240px;
-    }
-    
-    .num-matrix-cell {
-        width: 80px;
-        height: 80px;
-    }
-    
-    .num-elements-table {
-        width: 300px;
-    }
-}
-.input-container {
-    display: flex;
-    gap: 1rem;
-    margin-bottom: 1rem;
-    flex-wrap: wrap;
-}
-
-/* Input Styles */
-.input-group input[type="number"],
-textarea {
-    padding: 0.8rem;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    font-size: 1rem;
-    transition: var(--transition);
-}
-
-.input-group input[type="number"] {
-    width: 100%;
-    max-width: 150px;
-}
-
-textarea {
-    width: 100%;
-    min-height: 120px;
-    resize: vertical;
-    font-family: inherit;
-}
-
-
-
-/* Buttons */
-.btn-primary,
-.btn-primarys {
-    padding: 1rem 2rem;
-    border: none;
-    border-radius: 8px;
-    font-size: 1.1rem;
-    cursor: pointer;
-    transition: var(--transition);
-}
-
-.btn-primary {
-    background-color: var(--secondary);
-    color: white;
-}
-
-.btn-primarys {
-    background-color: #7ce1fa;
-    color: black;
-}
-
-.btn-primary:hover,
-.btn-primarys:hover {
-    transform: translateY(-2px);
-}
-
-.btn-primary:hover {
-    background-color: #2980b9;
-}
-
-.btn-primarys:hover {
-    background-color: #07beac;
-}
-
-/* Output Box */
-.output-box {
-    margin-top: 2rem;
-}
-
-/* Accordion */
-.accordion {
-    margin-bottom: 1rem;
-    border-radius: 10px;
-    overflow: hidden;
-    box-shadow: var(--shadow);
-}
-
-.accordion-header {
-    background-color: var(--primary);
-    color: white;
-    padding: 1rem;
-    cursor: pointer;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    font-weight: 600;
-    transition: var(--transition);
-}
-
-.accordion-header:hover {
-    background-color: #34495e;
-}
-
-.accordion-content {
-    background-color: white;
-    padding: 1.5rem;
-    display: none;
-}
-
-/* Table Styles */
-/* Table Styles */
-/* Thiết lập chung cho tất cả các bảng */
-table {
-    width: 250px; /* Giảm kích thước tổng thể của bảng */
-    border-collapse: collapse;
-    margin: 1rem auto;
-    background-color: white;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    border-radius: 8px;
-    overflow: hidden;
-}
-
-/* Style cho ô trong bảng */
-th, td {
-    text-align: center;
-    border: 1px solid #e0e0e0;
-    padding: 0.75rem;
-    font-size: 0.95rem;
-    transition: background-color 0.2s ease;
-}
-
-/* Bảng ma trận tâm lý */
-table:first-of-type {
-    margin-bottom: 2rem;
-}
-
-table:first-of-type td {
-    width: 80px; /* Kích thước ô nhỏ hơn */
-    height: 80px;
-    font-weight: 500;
-}
-
-/* Bảng ngũ hành */
-table:last-of-type {
-    width: 200px; /* Bảng ngũ hành nhỏ hơn */
-}
-
-table:last-of-type td {
-    width: 100px;
-    height: 40px; /* Chiều cao nhỏ hơn cho bảng ngũ hành */
-    padding: 0.5rem;
-}
-
-/* Style cho cột đầu tiên của bảng ngũ hành */
-table:last-of-type td:first-child {
-    background-color: #f8f9fa;
-    font-weight: 600;
-    width: 80px;
-}
-
-/* Hiệu ứng hover */
-td:hover {
-    background-color: #f5f5f5;
-}
-
-/* Đáp ứng màn hình nhỏ */
-@media (max-width: 480px) {
-    table {
-        width: 100%;
-        max-width: 250px;
-    }
-    
-    table:first-of-type td {
-        width: 70px;
-        height: 70px;
-        font-size: 0.9rem;
-    }
-}
-/* Animations */
-@keyframes fadeIn {
-    from {
-        opacity: 0;
-        transform: translateY(10px);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0);
-    }
-}
-
-/* Media Queries */
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-    }
-    
-    .tab-container {
-        flex-direction: column;
-    }
-    
-    .tab-button,
-    .input-group input[type="number"],
-    .btn-primary,
-    .btn-primarys {
-        width: 100%;
-    }
-    
-    .input-container {
-        flex-direction: column;
-    }
-    
-    .tab-button {
-        text-align: center;
-    }
-    .chart-container {
-            width: 100%;
-            height: 400px;
-            margin-top: 2rem;
-            background: white;
+        /* Container cho form numerology */
+        .num-form-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 0 auto;
             padding: 1rem;
+            max-width: 1200px;
+        }
+
+        /* Style cho nhóm input */
+        .num-input-group {
+            position: relative;
+            margin-bottom: 1.5rem;
+            background: white;
+            padding: 1.25rem;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+        }
+
+        .num-input-group:hover {
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .num-input-group label {
+            display: block;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.75rem;
+            font-size: 1rem;
+        }
+
+        .num-input {
+            width: 100%;
+            padding: 0.875rem 1rem;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: var(--transition);
+            background-color: #f8f9fa;
+        }
+
+        .num-input:focus {
+            border-color: var(--secondary);
+            background-color: white;
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        .num-btn-primary {
+            width: 100%;
+            padding: 1rem;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--secondary), #2980b9);
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 1rem;
+        }
+
+        .num-btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        }
+
+        /* Nút Action (+/-) cho năm */
+        .action-btn {
+            width: 45px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .action-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Bảng Summary */
+        .table-responsive {
+            width: 100%;
+            overflow-x: auto;
+            margin-bottom: 2rem;
             border-radius: 8px;
             box-shadow: var(--shadow);
         }
-        
-        .chart-title {
-            font-size: 1.1rem;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 1rem;
-            text-align: center;
+
+        .summary-table {
+            width: 100%;
+            min-width: 600px;
+            border-collapse: collapse;
+            background-color: white;
         }
-}
+
+        .summary-table th,
+        .summary-table td {
+            border: 1px solid #e0e0e0;
+            padding: 10px 15px;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .summary-table th {
+            background-color: var(--primary);
+            color: white;
+            font-weight: 600;
+        }
+
+        .summary-table th:first-child,
+        .summary-table td:first-child {
+            position: sticky;
+            left: 0;
+            background-color: #f8f9fa;
+            font-weight: bold;
+            z-index: 1;
+        }
+
+        .summary-table th:first-child {
+            background-color: var(--primary);
+        }
+
+        .summary-table tbody tr:hover td {
+            background-color: #f1f5f8;
+        }
+
+        /* Biểu đồ biến thiên CSS */
+        .chart-wrapper {
+            width: 100%;
+            overflow-x: auto;
+            /* Cho phép cuộn ngang */
+        }
+
+        .chart-container-inner {
+            position: relative;
+            height: 400px;
+            width: 100%;
+        }
+
+        /* Form bảo mật Chart */
+        .auth-section {
+            text-align: center;
+            padding: 2rem 1rem;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+            border: 1px dashed #ccc;
+        }
+
+        /* Accordion */
+        .accordion {
+            margin-top: 1.5rem;
+            margin-bottom: 1rem;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+
+        .accordion-header {
+            background-color: var(--primary);
+            color: white;
+            padding: 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+
+        .accordion-header:hover {
+            background-color: #34495e;
+        }
+
+        .accordion-content {
+            background-color: white;
+            padding: 1.5rem;
+            display: none;
+            /* Mặc định ẩn nội dung */
+        }
+
+        /* Bảng ma trận & ngũ hành bên trong accordion */
+        .inner-table {
+            width: 250px;
+            border-collapse: collapse;
+            margin: 1rem auto;
+            background-color: white;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .inner-table th,
+        .inner-table td {
+            text-align: center;
+            border: 1px solid #e0e0e0;
+            padding: 0.75rem;
+            font-size: 0.95rem;
+            transition: background-color 0.2s ease;
+        }
+
+        .matrix-table {
+            margin-bottom: 2rem;
+        }
+
+        .matrix-table td {
+            width: 80px;
+            height: 80px;
+            font-weight: 500;
+        }
+
+        .element-table {
+            width: 200px;
+        }
+
+        .element-table td {
+            width: 100px;
+            height: 40px;
+            padding: 0.5rem;
+        }
+
+        .element-table td:first-child {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            width: 80px;
+        }
+
+        .inner-table td:hover {
+            background-color: #f5f5f5;
+        }
+
+        /* Responsive mobile */
+        @media (max-width: 768px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .tab-container {
+                flex-direction: column;
+            }
+
+            .tab-button {
+                width: 100%;
+                text-align: center;
+            }
+
+            .num-form-container {
+                grid-template-columns: 1fr;
+            }
+
+            /* Ép chiều rộng cho Chart.js trên Mobile để có thể cuộn vuốt */
+            .chart-container-inner {
+                min-width: 520px;
+            }
+        }
     </style>
 </head>
+
 <body>
     <div class="container">
-        <!-- <div class="header">
-            <h1>Thần Số Học Tỉnh Thức</h1>
-        </div> -->
-
         <div class="tab-container">
-            <button class="tab-button active" onclick="showTab('generator')">Chuyển Đổi Xem Tháng </button>
-            <button class="tab-button" onclick="showTab('generators')">Chuyển Đổi Xem Năm </button>
-            <button class="tab-button" onclick="showTab('calculator')">TÍNH MATRIX</button>
+            <button class="tab-button active" onclick="showTab('generator')">Xem matrix tháng</button>
+            <button class="tab-button" onclick="showTab('generators')">Xem matrix năm</button>
         </div>
 
         <div id="generator" class="tab-content active">
             <div class="num-form-container">
                 <div class="num-input-group">
                     <label for="numBirthDate">📅 Ngày sinh:</label>
-                    <input type="number" id="numBirthDate" class="num-input" placeholder="Nhập ngày sinh (không lấy tháng, năm)" min="1" max="31" required />
+                    <input type="number" id="numBirthDate" class="num-input" placeholder="Nhập ngày sinh" min="1"
+                        max="31" required />
                 </div>
-                
                 <div class="num-input-group">
-                    <label for="numStartMonth">📅 THÁNG MUỐN XÉT từ tháng:</label>
-                    <input type="number" id="numStartMonth" class="num-input" placeholder="Nhập tháng bắt đầu" min="1" max="12" required />
+                    <label for="numStartMonth">📅 THÁNG bắt đầu:</label>
+                    <input type="number" id="numStartMonth" class="num-input" placeholder="Từ tháng" min="1" max="12"
+                        required />
                 </div>
-                
                 <div class="num-input-group">
-                    <label for="numEndMonth">📅 THÁNG MUỐN XÉT tới tháng:</label>
-                    <input type="number" id="numEndMonth" class="num-input" placeholder="Nhập tháng kết thúc" min="1" max="12" required />
+                    <label for="numEndMonth">📅 THÁNG kết thúc:</label>
+                    <input type="number" id="numEndMonth" class="num-input" placeholder="Tới tháng" min="1" max="12"
+                        required />
                 </div>
-                
                 <div class="num-input-group">
-                    <label for="numBirthYear">📅 Năm muốn xét:</label>
-                    <input type="number" id="numBirthYear" class="num-input" placeholder="Nhập năm muốn xét" min="1900" max="2100" required />
+                    <label for="numBirthYear">📅 Năm muốn xét: <span id="extraYearText"
+                            style="color: var(--accent); font-weight: bold; font-size: 0.9em; margin-left: 5px;"></span></label>
+                    <div style="display: flex; gap: 0.5rem;">
+                        <input type="number" id="numBirthYear" class="num-input" placeholder="Nhập năm" min="1900"
+                            max="2100" required />
+                        <button type="button" onclick="changeExtraYear(1)" class="action-btn"
+                            title="Thêm 1 năm">+</button>
+                        <button type="button" onclick="changeExtraYear(-1)" class="action-btn"
+                            style="background-color: #95a5a6;" title="Giảm 1 năm">-</button>
+                    </div>
                 </div>
             </div>
-            
-            <div class="num-btn-container">
-                <button class="num-btn-primary" onclick="generateNumerologyDates()">
-                    <span>KẾT QUẢ</span>
-                </button>
+
+            <button class="num-btn-primary" onclick="generateNumerologyDates()">KẾT QUẢ</button>
+
+            <div id="summaryContainerMonth"></div>
+
+            <div id="chartAccordionMonth" class="accordion" style="display: none;">
+                <div class="accordion-header" onclick="toggleAccordionContent(this)">
+                    📈 Xem Biểu Đồ Biến Thiên Ngũ Hành <span>▼</span>
+                </div>
+                <div class="accordion-content" style="padding: 1rem;">
+
+                    <div id="authSectionMonth" class="auth-section">
+                        <p style="margin-bottom: 1rem; font-weight: 600; color: var(--primary);">🔒 Vui lòng nhập mật
+                            khẩu để xem biểu đồ</p>
+                        <div
+                            style="display: flex; gap: 0.5rem; justify-content: center; max-width: 400px; margin: 0 auto;">
+                            <input type="password" id="chartPwdMonth" class="num-input" placeholder="Nhập mật khẩu..."
+                                style="margin-bottom: 0; padding: 0.5rem 1rem;"
+                                onkeypress="if(event.key === 'Enter') checkChartPassword('Month')" />
+                            <button type="button" onclick="checkChartPassword('Month')" class="num-btn-primary"
+                                style="padding: 0.5rem 1.5rem; width: auto; margin-bottom: 0;">Mở khóa</button>
+                        </div>
+                        <p id="pwdErrorMonth"
+                            style="color: var(--accent); font-size: 0.9rem; margin-top: 0.5rem; display: none;">Mật khẩu
+                            không chính xác!</p>
+                    </div>
+
+                    <div id="chartWrapperMonth" class="chart-wrapper" style="display: none;">
+                        <div class="chart-container-inner">
+                            <canvas id="lineChartMonth"></canvas>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            
-            <div class="num-output-box">
-                <label for="numGeneratedDates">🔍 Kết quả :</label>
-                <textarea id="numGeneratedDates" class="num-textarea" readonly></textarea>
-            </div>
-            <div class="num-btn-container">
-                <button class="num-btn-primary" onclick="copyResult('numGeneratedDates')">
-                    <span>SAO CHÉP KẾT QUẢ</span>
-                </button>
-            </div>
+
+            <div id="resultContainerMonth"></div>
         </div>
-<!-- Chuyển đổi tab nămnăm -->
+
         <div id="generators" class="tab-content">
             <div class="num-form-container">
                 <div class="num-input-group">
                     <label for="numBirthDates">📅 Ngày sinh :</label>
-                    <input type="number" id="numBirthDates" class="num-input" placeholder="Nhập ngày sinh (không lấy tháng, năm)" min="1" max="31" required />
+                    <input type="number" id="numBirthDates" class="num-input" placeholder="Nhập ngày sinh" min="1"
+                        max="31" required />
                 </div>
-                
                 <div class="num-input-group">
                     <label for="numStartMonths">📅 Tháng sinh:</label>
-                    <input type="number" id="numStartMonths" class="num-input" placeholder="Nhập tháng sinh" min="1" max="12" required />
+                    <input type="number" id="numStartMonths" class="num-input" placeholder="Nhập tháng sinh" min="1"
+                        max="12" required />
                 </div>
-                
                 <div class="num-input-group">
-                    <label for="numStartYears">📅 NĂM MUỐN XÉT từ năm:</label>
-                    <input type="number" id="numStartYears" class="num-input" placeholder="Nhập năm bắt đầu" min="1900" max="2100" required />
+                    <label for="numStartYears">📅 NĂM bắt đầu:</label>
+                    <input type="number" id="numStartYears" class="num-input" placeholder="Từ năm" min="1900" max="2100"
+                        required />
                 </div>
-                
                 <div class="num-input-group">
-                    <label for="numEndYears">📅 NĂM MUỐN XÉT tới năm:</label>
-                    <input type="number" id="numEndYears" class="num-input" placeholder="Nhập năm kết thúc" min="1900" max="2100" required />
+                    <label for="numEndYears">📅 NĂM kết thúc:</label>
+                    <input type="number" id="numEndYears" class="num-input" placeholder="Tới năm" min="1900" max="2100"
+                        required />
                 </div>
             </div>
-            
-            <div class="num-btn-container">
-                <button class="num-btn-primary" onclick="generateNumerologyDatesYear()">
-                    <span>KẾT QUẢ</span>
-                </button>
-            </div>
-            
-            <div class="num-output-box">
-                <label for="numGeneratedDatess">🔍 Kết quả :</label>
-                <textarea id="numGeneratedDatess" class="num-textarea" readonly></textarea>
-            </div>
-            <div class="num-btn-container">
-                <button class="num-btn-primary" onclick="copyResult('numGeneratedDatess')">
-                    <span>SAO CHÉP KẾT QUẢ</span>
-                </button>
-            </div>
-        </div>
 
-        <div id="calculator" class="tab-content">
-            <div class="input-group">
-                <label for="multiBirthDates">Nhập các ngày sinh (cách nhau bằng dấu phẩy):</label>
-                <textarea id="multiBirthDates" placeholder="Ví dụ: 1/1/2000, 15/6/1995, 30/12/1988"></textarea>
-                <button class="btn-primary" onclick="processBirthDates()">Tính Kết Quả</button>
+            <button class="num-btn-primary" onclick="generateNumerologyDatesYear()">KẾT QUẢ</button>
+
+            <div id="summaryContainerYear"></div>
+
+            <div id="chartAccordionYear" class="accordion" style="display: none;">
+                <div class="accordion-header" onclick="toggleAccordionContent(this)">
+                    📈 Xem Biểu Đồ Biến Thiên Ngũ Hành <span>▼</span>
+                </div>
+                <div class="accordion-content" style="padding: 1rem;">
+
+                    <div id="authSectionYear" class="auth-section">
+                        <p style="margin-bottom: 1rem; font-weight: 600; color: var(--primary);">🔒 Vui lòng nhập mật
+                            khẩu để xem biểu đồ</p>
+                        <div
+                            style="display: flex; gap: 0.5rem; justify-content: center; max-width: 400px; margin: 0 auto;">
+                            <input type="password" id="chartPwdYear" class="num-input" placeholder="Nhập mật khẩu..."
+                                style="margin-bottom: 0; padding: 0.5rem 1rem;"
+                                onkeypress="if(event.key === 'Enter') checkChartPassword('Year')" />
+                            <button type="button" onclick="checkChartPassword('Year')" class="num-btn-primary"
+                                style="padding: 0.5rem 1.5rem; width: auto; margin-bottom: 0;">Mở khóa</button>
+                        </div>
+                        <p id="pwdErrorYear"
+                            style="color: var(--accent); font-size: 0.9rem; margin-top: 0.5rem; display: none;">Mật khẩu
+                            không chính xác!</p>
+                    </div>
+
+                    <div id="chartWrapperYear" class="chart-wrapper" style="display: none;">
+                        <div class="chart-container-inner">
+                            <canvas id="lineChartYear"></canvas>
+                        </div>
+                    </div>
+
+                </div>
             </div>
-            <div id="resultContainer"></div>
+
+            <div id="resultContainerYear"></div>
         </div>
     </div>
 
-<script>
-   function copyResult(elementId) {
-    const text = document.getElementById(elementId).value;
-    
-    const showToast = (message, success) => {
-        const toast = document.createElement('div');
-        toast.textContent = message;
-        toast.style.position = 'fixed';
-        toast.style.bottom = '20px';
-        toast.style.left = '50%';
-        toast.style.transform = 'translateX(-50%)';
-        toast.style.padding = '10px 20px';
-        toast.style.borderRadius = '5px';
-        toast.style.backgroundColor = success ? '#4CAF50' : '#f44336';
-        toast.style.color = 'white';
-        toast.style.fontSize = '14px';
-        toast.style.zIndex = '1000';
-        document.body.appendChild(toast);
-
-        setTimeout(() => {
-            toast.style.opacity = '0';
-            setTimeout(() => {
-                document.body.removeChild(toast);
-            }, 500);
-        }, 3000);
-    };
-
-    if (text) {
-        navigator.clipboard.writeText(text).then(() => {
-            showToast('Đã sao chép kết quả vào clipboard!', true);
-        }).catch(err => {
-            console.error('Không thể sao chép kết quả: ', err);
-            showToast('Sao chép không thành công, vui lòng thử lại.', false);
-        });
-    } else {
-        showToast('Không có kết quả để sao chép.', false);
-    }
-}
-
-    function showTab(tabId) {
-        // Hide all tabs
-        document.querySelectorAll('.tab-content').forEach(tab => {
-            tab.classList.remove('active');
-        });
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.classList.remove('active');
-        });
-
-        // Show the selected tab
-        document.getElementById(tabId).classList.add('active');
-        document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
-    }
-
-    // Hàm chuyển đổi xem tháng
-    function generateNumerologyDates() {
-        const birthDate = parseInt(document.getElementById('numBirthDate').value);
-        const startMonth = parseInt(document.getElementById('numStartMonth').value);
-        const endMonth = parseInt(document.getElementById('numEndMonth').value);
-        const birthYear = parseInt(document.getElementById('numBirthYear').value);
-        
-        if (!birthDate || !startMonth || !endMonth || !birthYear) {
-            alert('Vui lòng nhập đầy đủ ngày, tháng, năm sinh!');
-            return;
+    <script>
+        // Hàm dùng chung cho các Accordion (ẩn/hiện)
+        function toggleAccordionContent(element) {
+            const content = element.nextElementSibling;
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
         }
-        
-        let result = '';
-        
-        for (let month = startMonth; month <= endMonth; month++) {
-            const futureDate = new Date(birthYear, month - 1, birthDate);
-            const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
-            
-            if (result) {
-                result += `, ${futureFormatted}`;
+
+        // Logic Tab
+        function showTab(tabId) {
+            document.querySelectorAll('.tab-content, .tab-button').forEach(el => el.classList.remove('active'));
+            document.getElementById(tabId).classList.add('active');
+            document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // Biến lưu trạng thái mở khóa mật khẩu chart
+        let isChartUnlocked = false;
+
+        // Logic Mở khóa biểu đồ
+        function checkChartPassword(tabSuffix) {
+            const pwdInput = document.getElementById('chartPwd' + tabSuffix).value;
+            if (pwdInput === 'tshtinhthuc') {
+                isChartUnlocked = true;
+
+                // Ẩn form nhập pass và show chart cho cả 2 tab (mở khóa 1 lần xem cả 2)
+                document.getElementById('authSectionMonth').style.display = 'none';
+                document.getElementById('chartWrapperMonth').style.display = 'block';
+                document.getElementById('authSectionYear').style.display = 'none';
+                document.getElementById('chartWrapperYear').style.display = 'block';
+
+                // Resize biểu đồ để tránh lỗi scale khi đổi từ display:none sang block
+                if (myChartMonth) myChartMonth.resize();
+                if (myChartYear) myChartYear.resize();
+
             } else {
-                result += futureFormatted;
+                document.getElementById('pwdError' + tabSuffix).style.display = 'block';
             }
         }
-        
-        document.getElementById('numGeneratedDates').value = result;
-     //   document.getElementById('multiBirthDates').value = result;
-        
-        // Copy to clipboard
-        copyToClipboard(result);
-    }
 
-    // Hàm chuyển đổi xem năm
-    function generateNumerologyDatesYear() {
-        // Lấy giá trị từ các input fields
-        const birthDate = parseInt(document.getElementById('numBirthDates').value); // Ngày sinh
-        const birthMonth = parseInt(document.getElementById('numStartMonths').value); // Tháng sinh
-        const startYear = parseInt(document.getElementById('numStartYears').value); // Năm bắt đầu
-        const endYear = parseInt(document.getElementById('numEndYears').value); // Năm kết thúc
-        
-        // Kiểm tra dữ liệu nhập vào
-        if (!birthDate || !birthMonth || !startYear || !endYear) {
-            alert('Vui lòng nhập đầy đủ ngày, tháng, năm!');
-            return;
+        // Hỗ Trợ Phím Enter
+        document.addEventListener('keydown', function (event) {
+            if (event.key === 'Enter') {
+                const activeElement = document.activeElement;
+                // Tránh việc nhấn Enter trong ô mật khẩu kích hoạt hàm KẾT QUẢ
+                if (activeElement.id === 'chartPwdMonth' || activeElement.id === 'chartPwdYear') return;
+
+                if (document.getElementById('generator').classList.contains('active')) {
+                    generateNumerologyDates();
+                } else if (document.getElementById('generators').classList.contains('active')) {
+                    generateNumerologyDatesYear();
+                }
+            }
+        });
+
+        // Logic Quản Lý "+ NĂM" cho Tab Tháng
+        let extraYearsMonth = 0;
+        function changeExtraYear(amount) {
+            extraYearsMonth += amount;
+            if (extraYearsMonth < 0) extraYearsMonth = 0;
+            const baseYear = document.getElementById('numBirthYear').value;
+            updateExtraYearText(baseYear);
         }
-        
-        let result = ''; // Biến chứa các ngày sẽ được tạo ra
-        
-        // Tạo ngày cho mỗi năm từ startYear đến endYear
-        for (let year = startYear; year <= endYear; year++) {
-            const futureDate = new Date(year, birthMonth - 1, birthDate); // Lưu ý: tháng trong JavaScript bắt đầu từ 0
-            const futureFormatted = `${futureDate.getDate()}/${futureDate.getMonth() + 1}/${futureDate.getFullYear()}`;
-            
-            // Nếu đây không phải là ngày đầu tiên, thêm dấu phẩy
-            if (result) {
-                result += `, ${futureFormatted}`;
+
+        function updateExtraYearText(baseYear) {
+            const textEl = document.getElementById('extraYearText');
+            if (extraYearsMonth === 0) {
+                textEl.innerText = "";
             } else {
-                result += futureFormatted;
+                if (baseYear) {
+                    textEl.innerText = `(Kéo dài tới năm ${parseInt(baseYear) + extraYearsMonth})`;
+                } else {
+                    textEl.innerText = `(+${extraYearsMonth} năm)`;
+                }
             }
         }
-        
-        // Cập nhật kết quả vào textarea
-        document.getElementById('numGeneratedDatess').value = result;
 
-        // Cập nhật kết quả vào trường multiBirthDates
-   //     document.getElementById('multiBirthDates').value = result;
+        document.getElementById('numBirthYear').addEventListener('input', function () {
+            updateExtraYearText(this.value);
+        });
 
-        // Sao chép kết quả vào clipboard
-        copyToClipboard(result);
-    }
+        // QUY TẮC NGŨ HÀNH
+        const NGU_HANH_RULES = {
+            "KIM": [1, 2, 3, 5, 6, 9],
+            "MỘC": [1, 4, 5, 7, 8, 9],
+            "THỦY": [1, 2, 3, 4, 5, 7],
+            "HỎA": [3, 5, 6, 7, 8, 9],
+            "THỔ": [4, 5, 6]
+        };
 
-    // Hàm sao chép vào clipboard
-    function copyToClipboard(text) {
-        const textarea = document.createElement('textarea');
-        textarea.value = text;
-        document.body.appendChild(textarea);
-        textarea.select();
-        document.execCommand('copy');
-        document.body.removeChild(textarea);
-    }
-
-    function processBirthDates() {
-        const input = document.getElementById('multiBirthDates').value;
-        if (!input.trim()) {
-            alert('Vui lòng nhập ít nhất một ngày sinh!');
-            return;
+        function getElementValue(numbers, cells, isQualitative) {
+            if (isQualitative) {
+                return cells.map(cell => numbers[cell]).filter(v => v !== "").join(" ");
+            } else {
+                return cells.reduce((sum, cell) => sum + (numbers[cell] ? numbers[cell].length : 0), 0);
+            }
         }
 
-        const birthDates = input.split(',').map(date => date.trim());
-        const resultContainer = document.getElementById('resultContainer');
-        resultContainer.innerHTML = '';
-
-        birthDates.forEach((birthDate, index) => {
-            const [day, month, year] = birthDate.split('/').map(Number);
-            if (!day || !month || !year) return;
-
+        function calculateElementsForDate(day, month, year) {
             const numbers = calculateNumbers(day, month, year);
+            const result = { quantitative: {}, qualitative: {}, originalNumbers: numbers };
+            for (const [element, cells] of Object.entries(NGU_HANH_RULES)) {
+                result.quantitative[element] = getElementValue(numbers, cells, false);
+                result.qualitative[element] = getElementValue(numbers, cells, true);
+            }
+            return result;
+        }
 
-            // Tạo một mảng các ngũ hành và giá trị tương ứng
-            const elements = [
-                { name: "THỔ", value: numbers.tho, color: "#FF8C00" },
-                { name: "HỎA", value: numbers.hoa, color: "#FF6B6B" },
-                { name: "THỦY", value: numbers.thuy, color: "#4169E1" },
-                { name: "MỘC", value: numbers.moc, color: "#2E8B57" },
-                { name: "KIM", value: numbers.kim, color: "#FFD700" }
+        // HTML BẢNG SUMMARY
+        function buildSummaryTablesHTML(headers, dataList, columnLabel) {
+            const elements = ["KIM", "MỘC", "THỦY", "HỎA", "THỔ"];
+            let table1 = `<div class="table-responsive"><table class="summary-table">
+            <thead><tr><th>Bảng 1: Định lượng</th>`;
+            headers.forEach(h => table1 += `<th>${columnLabel ? columnLabel + ' ' : ''}${h}</th>`);
+            table1 += `</tr></thead><tbody>`;
+            elements.forEach(el => {
+                table1 += `<tr><td><strong>${el}</strong></td>`;
+                dataList.forEach(data => table1 += `<td>${data.quantitative[el]}</td>`);
+                table1 += `</tr>`;
+            });
+            table1 += `</tbody></table></div>`;
+
+            let table2 = `<div class="table-responsive"><table class="summary-table">
+            <thead><tr><th>Bảng 2: Định tính</th>`;
+            headers.forEach(h => table2 += `<th>${columnLabel ? columnLabel + ' ' : ''}${h}</th>`);
+            table2 += `</tr></thead><tbody>`;
+            elements.forEach(el => {
+                table2 += `<tr><td><strong>${el}</strong></td>`;
+                dataList.forEach(data => table2 += `<td>${data.qualitative[el] || "-"}</td>`);
+                table2 += `</tr>`;
+            });
+            table2 += `</tbody></table></div>`;
+
+            return table1 + table2;
+        }
+
+        // BIẾN LƯU TRỮ CHART CŨ
+        let myChartMonth = null;
+        let myChartYear = null;
+
+        // HÀM VẼ BIỂU ĐỒ ĐƯỜNG GẤP KHÚC (TENSION = 0)
+        function renderLineChart(headers, dataList, canvasId, labelPrefix) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+
+            if (canvasId === 'lineChartMonth' && myChartMonth) myChartMonth.destroy();
+            if (canvasId === 'lineChartYear' && myChartYear) myChartYear.destroy();
+
+            const datasets = [
+                {
+                    label: 'KIM',
+                    data: dataList.map(d => d.quantitative['KIM']),
+                    borderColor: '#FFC107',
+                    borderWidth: 3, pointBackgroundColor: '#FFC107', fill: false, tension: 0 // Đổi tension thành 0
+                },
+                {
+                    label: 'MỘC',
+                    data: dataList.map(d => d.quantitative['MỘC']),
+                    borderColor: '#00E676',
+                    borderWidth: 3, pointBackgroundColor: '#00E676', fill: false, tension: 0 // Đổi tension thành 0
+                },
+                {
+                    label: 'THỦY',
+                    data: dataList.map(d => d.quantitative['THỦY']),
+                    borderColor: '#00BFFF',
+                    borderWidth: 3, pointBackgroundColor: '#00BFFF', fill: false, tension: 0 // Đổi tension thành 0
+                },
+                {
+                    label: 'HỎA',
+                    data: dataList.map(d => d.quantitative['HỎA']),
+                    borderColor: '#FF1744',
+                    borderWidth: 3, pointBackgroundColor: '#FF1744', fill: false, tension: 0 // Đổi tension thành 0
+                },
+                {
+                    label: 'THỔ',
+                    data: dataList.map(d => d.quantitative['THỔ']),
+                    borderColor: '#FF9100',
+                    borderWidth: 3, pointBackgroundColor: '#FF9100', fill: false, tension: 0 // Đổi tension thành 0
+                }
             ];
 
-            // Sắp xếp mảng theo giá trị tăng dần
-            elements.sort((a, b) => a.value - b.value);
-
-            const accordion = document.createElement('div');
-            accordion.className = 'accordion';
-
-            const header = document.createElement('div');
-            header.className = 'accordion-header';
-            header.innerHTML = `📅 Ma trận tâm lý: ${birthDate} <span>▼</span>`;
-            header.onclick = function() {
-                const content = this.nextElementSibling;
-                content.style.display = content.style.display === 'block' ? 'none' : 'block';
+            const chartConfig = {
+                type: 'line',
+                data: {
+                    labels: headers.map(h => (labelPrefix ? labelPrefix + ' ' : '') + h),
+                    datasets: datasets
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { position: 'top' },
+                        title: { display: true, text: 'Biểu đồ biến thiên Ngũ Hành (Định lượng)' }
+                    },
+                    scales: {
+                        x: {
+                            grid: { display: false }
+                        },
+                        y: {
+                            beginAtZero: true,
+                            grid: { color: '#f0f0f0' }
+                        }
+                    }
+                }
             };
 
-            const content = document.createElement('div');
-            content.className = 'accordion-content';
-            
-            // Tạo bảng ma trận tâm lý
-            let matrixTable = `
-                <table>
+            const newChart = new Chart(ctx, chartConfig);
+
+            if (canvasId === 'lineChartMonth') {
+                myChartMonth = newChart;
+                document.getElementById('chartAccordionMonth').style.display = 'block';
+                document.querySelector('#chartAccordionMonth .accordion-content').style.display = 'none'; // reset đóng
+
+                if (isChartUnlocked) {
+                    document.getElementById('authSectionMonth').style.display = 'none';
+                    document.getElementById('chartWrapperMonth').style.display = 'block';
+                } else {
+                    document.getElementById('authSectionMonth').style.display = 'block';
+                    document.getElementById('chartWrapperMonth').style.display = 'none';
+                    document.getElementById('chartPwdMonth').value = '';
+                    document.getElementById('pwdErrorMonth').style.display = 'none';
+                }
+            } else {
+                myChartYear = newChart;
+                document.getElementById('chartAccordionYear').style.display = 'block';
+                document.querySelector('#chartAccordionYear .accordion-content').style.display = 'none'; // reset đóng
+
+                if (isChartUnlocked) {
+                    document.getElementById('authSectionYear').style.display = 'none';
+                    document.getElementById('chartWrapperYear').style.display = 'block';
+                } else {
+                    document.getElementById('authSectionYear').style.display = 'block';
+                    document.getElementById('chartWrapperYear').style.display = 'none';
+                    document.getElementById('chartPwdYear').value = '';
+                    document.getElementById('pwdErrorYear').style.display = 'none';
+                }
+            }
+        }
+
+        // XỬ LÝ TAB THÁNG
+        function generateNumerologyDates() {
+            const birthDate = parseInt(document.getElementById('numBirthDate').value);
+            const startMonth = parseInt(document.getElementById('numStartMonth').value);
+            const endMonth = parseInt(document.getElementById('numEndMonth').value);
+            const birthYear = parseInt(document.getElementById('numBirthYear').value);
+
+            if (!birthDate || !startMonth || !endMonth || !birthYear) return alert('Vui lòng nhập đủ ngày, tháng, năm sinh!');
+            if (startMonth > endMonth && extraYearsMonth === 0) return alert('Tháng bắt đầu không được lớn hơn tháng kết thúc!');
+
+            let datesResult = [];
+            let headers = [];
+            let dataList = [];
+
+            for (let y = birthYear; y <= birthYear + extraYearsMonth; y++) {
+                let sMonth = (y === birthYear) ? startMonth : 1;
+                let eMonth = (y === birthYear + extraYearsMonth) ? endMonth : 12;
+
+                for (let month = sMonth; month <= eMonth; month++) {
+                    const dateObj = new Date(y, month - 1, birthDate);
+                    datesResult.push(`${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()}`);
+
+                    let headerVal = extraYearsMonth > 0 ? `${month}/${y}` : month;
+                    headers.push(headerVal);
+                    dataList.push(calculateElementsForDate(birthDate, month, y));
+                }
+            }
+
+            let label = extraYearsMonth > 0 ? "" : "Tháng";
+            document.getElementById('summaryContainerMonth').innerHTML = buildSummaryTablesHTML(headers, dataList, label);
+
+            renderLineChart(headers, dataList, 'lineChartMonth', label);
+            renderMatrixFromDataList(datesResult, dataList, 'resultContainerMonth');
+        }
+
+        // XỬ LÝ TAB NĂM
+        function generateNumerologyDatesYear() {
+            const birthDate = parseInt(document.getElementById('numBirthDates').value);
+            const birthMonth = parseInt(document.getElementById('numStartMonths').value);
+            const startYear = parseInt(document.getElementById('numStartYears').value);
+            const endYear = parseInt(document.getElementById('numEndYears').value);
+
+            if (!birthDate || !birthMonth || !startYear || !endYear) return alert('Vui lòng nhập đủ ngày, tháng, năm!');
+            if (startYear > endYear) return alert('Năm bắt đầu không được lớn hơn năm kết thúc!');
+
+            let datesResult = [];
+            let headers = [];
+            let dataList = [];
+
+            for (let year = startYear; year <= endYear; year++) {
+                const dateObj = new Date(year, birthMonth - 1, birthDate);
+                datesResult.push(`${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()}`);
+
+                headers.push(year);
+                dataList.push(calculateElementsForDate(birthDate, birthMonth, year));
+            }
+
+            document.getElementById('summaryContainerYear').innerHTML = buildSummaryTablesHTML(headers, dataList, "Năm");
+
+            renderLineChart(headers, dataList, 'lineChartYear', "Năm");
+            renderMatrixFromDataList(datesResult, dataList, 'resultContainerYear');
+        }
+
+        // RENDER CHI TIẾT CÁC NGÀY ĐỒNG BỘ MÀU VỚI CHART
+        function renderMatrixFromDataList(dateStrings, dataList, containerId) {
+            const resultContainer = document.getElementById(containerId);
+            resultContainer.innerHTML = '';
+
+            dateStrings.forEach((dateStr, index) => {
+                const data = dataList[index];
+                const numbers = data.originalNumbers;
+                const quant = data.quantitative;
+
+                const elementsArr = [
+                    { name: "KIM", value: quant["KIM"], color: "#FFC107" },
+                    { name: "MỘC", value: quant["MỘC"], color: "#00E676" },
+                    { name: "THỦY", value: quant["THỦY"], color: "#00BFFF" },
+                    { name: "HỎA", value: quant["HỎA"], color: "#FF1744" },
+                    { name: "THỔ", value: quant["THỔ"], color: "#FF9100" }
+                ];
+                elementsArr.sort((a, b) => a.value - b.value);
+
+                const accordion = document.createElement('div');
+                accordion.className = 'accordion';
+
+                const header = document.createElement('div');
+                header.className = 'accordion-header';
+                header.innerHTML = `📅 Chi tiết ma trận: ${dateStr} <span>▼</span>`;
+                header.onclick = function () {
+                    toggleAccordionContent(this);
+                };
+
+                const content = document.createElement('div');
+                content.className = 'accordion-content';
+
+                let matrixTable = `
+                <table class="inner-table matrix-table">
                     <tr><td>${numbers[3]}</td><td>${numbers[6]}</td><td>${numbers[9]}</td></tr>
                     <tr><td>${numbers[2]}</td><td>${numbers[5]}</td><td>${numbers[8]}</td></tr>
                     <tr><td>${numbers[1]}</td><td>${numbers[4]}</td><td>${numbers[7]}</td></tr>
                 </table>
             `;
-            
-            // Tạo bảng ngũ hành đã được sắp xếp từ phải sang trái (giá trị tăng dần)
-            let elementsTable = `
-                <table>
-                    <tr>`;
-            
-            // Thêm các phần tử vào bảng từ phải sang trái (mảng đảo ngược)
-            for (let i = elements.length - 1; i >= 0; i--) {
-                const element = elements[i];
-                elementsTable += `
+
+                let elementsTable = `<table class="inner-table element-table"><tr>`;
+                for (let i = elementsArr.length - 1; i >= 0; i--) {
+                    const el = elementsArr[i];
+                    elementsTable += `
                     <td>
-                        <span class="number" style="color: ${element.color}">${element.value}</span>
-                        <span class="element" style="color: ${element.color}">${element.name}</span>
+                        <span style="color: ${el.color}; font-size: 1.2rem; display: block; text-shadow: 0px 0px 1px rgba(0,0,0,0.2);">${el.value}</span>
+                        <span style="color: ${el.color}; font-weight: 700; text-shadow: 0px 0px 1px rgba(0,0,0,0.2);">${el.name}</span>
                     </td>`;
-            }
-            
-            elementsTable += `
-                    </tr>
-                </table>
-            `;
-            
-            content.innerHTML = matrixTable + elementsTable;
+                }
+                elementsTable += `</tr></table>`;
 
-            accordion.appendChild(header);
-            accordion.appendChild(content);
-            resultContainer.appendChild(accordion);
-        });
-    }
+                content.innerHTML = matrixTable + elementsTable;
+                accordion.appendChild(header);
+                accordion.appendChild(content);
+                resultContainer.appendChild(accordion);
+            });
+        }
 
-    function calculateNumbers(birthDate, birthMonth, birthYear) {
-        const dateDigits = Array.from(
-            birthYear.toString() + birthMonth.toString().padStart(2, '0') + birthDate.toString().padStart(2, '0')
-        ).map(Number);
+        // TÍNH TOÁN CORE CON SỐ
+        function calculateNumbers(birthDate, birthMonth, birthYear) {
+            const dateDigits = Array.from(
+                birthYear.toString() + birthMonth.toString().padStart(2, '0') + birthDate.toString().padStart(2, '0')
+            ).map(Number);
 
-        const digitCount = Array(10).fill(0);
-        dateDigits.forEach(num => digitCount[num]++);
+            const digitCount = Array(10).fill(0);
+            dateDigits.forEach(num => digitCount[num]++);
 
-        const sum = dateDigits.reduce((a, b) => a + b, 0);
-        Array.from(sum.toString()).map(Number).forEach(num => digitCount[num]++);
+            const sum = dateDigits.reduce((a, b) => a + b, 0);
+            Array.from(sum.toString()).map(Number).forEach(num => digitCount[num]++);
 
-        const secondNum = Array.from(sum.toString()).reduce((a, b) => a + Number(b), 0);
-        Array.from(secondNum.toString()).map(Number).forEach(num => digitCount[num]++);
+            const secondNum = Array.from(sum.toString()).reduce((a, b) => a + Number(b), 0);
+            Array.from(secondNum.toString()).map(Number).forEach(num => digitCount[num]++);
 
-        const thirdNum = sum - (2 * (birthDate < 10 ? birthDate : Math.floor(birthDate / 10)));
-        Array.from(thirdNum.toString()).map(Number).forEach(num => digitCount[num]++);
+            const thirdNum = sum - (2 * (birthDate < 10 ? birthDate : Math.floor(birthDate / 10)));
+            Array.from(thirdNum.toString()).map(Number).forEach(num => digitCount[num]++);
 
-        const fourthNum = Array.from(thirdNum.toString()).reduce((a, b) => a + Number(b), 0);
-        Array.from(fourthNum.toString()).map(Number).forEach(num => digitCount[num]++);
+            const fourthNum = Array.from(thirdNum.toString()).reduce((a, b) => a + Number(b), 0);
+            Array.from(fourthNum.toString()).map(Number).forEach(num => digitCount[num]++);
 
-        return {
-            1: digitCount[1] ? '1'.repeat(digitCount[1]) : '',
-            2: digitCount[2] ? '2'.repeat(digitCount[2]) : '',
-            3: digitCount[3] ? '3'.repeat(digitCount[3]) : '',
-            4: digitCount[4] ? '4'.repeat(digitCount[4]) : '',
-            5: digitCount[5] ? '5'.repeat(digitCount[5]) : '',
-            6: digitCount[6] ? '6'.repeat(digitCount[6]) : '',
-            7: digitCount[7] ? '7'.repeat(digitCount[7]) : '',
-            8: digitCount[8] ? '8'.repeat(digitCount[8]) : '',
-            9: digitCount[9] ? '9'.repeat(digitCount[9]) : '',
-            hoa: digitCount[3] + digitCount[5] + digitCount[6] + digitCount[7] + digitCount[8] + digitCount[9],
-            tho: digitCount[4] + digitCount[5] + digitCount[6],
-            kim: digitCount[1] + digitCount[2] + digitCount[3] + digitCount[5] + digitCount[6] + digitCount[9],
-            moc: digitCount[1] + digitCount[4] + digitCount[7] + digitCount[8] + digitCount[9] + digitCount[5],
-            thuy: digitCount[1] + digitCount[2] + digitCount[3] + digitCount[4] + digitCount[5] + digitCount[7]
-        };
-    }
-</script>
+            return {
+                1: digitCount[1] ? '1'.repeat(digitCount[1]) : '',
+                2: digitCount[2] ? '2'.repeat(digitCount[2]) : '',
+                3: digitCount[3] ? '3'.repeat(digitCount[3]) : '',
+                4: digitCount[4] ? '4'.repeat(digitCount[4]) : '',
+                5: digitCount[5] ? '5'.repeat(digitCount[5]) : '',
+                6: digitCount[6] ? '6'.repeat(digitCount[6]) : '',
+                7: digitCount[7] ? '7'.repeat(digitCount[7]) : '',
+                8: digitCount[8] ? '8'.repeat(digitCount[8]) : '',
+                9: digitCount[9] ? '9'.repeat(digitCount[9]) : ''
+            };
+        }
+    </script>
 </body>
+
 </html>
