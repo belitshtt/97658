@@ -50,6 +50,7 @@
         .tab-button {
             padding: 1rem 2rem;
             font-size: 1.1rem;
+            font-weight: bold;
             border: none;
             border-radius: 10px;
             background-color: white;
@@ -226,6 +227,12 @@
             background-color: #f1f5f8;
         }
 
+        /* Các class cho Table Title để xử lý xuống dòng */
+        .th-title,
+        .th-subtitle {
+            display: inline;
+        }
+
         /* Biểu đồ biến thiên CSS */
         .chart-wrapper {
             width: 100%;
@@ -349,6 +356,13 @@
                 grid-template-columns: 1fr;
             }
 
+            /* Chia 2 dòng trên Mobile cho Title bảng */
+            .th-title,
+            .th-subtitle {
+                display: block;
+                line-height: 1.4;
+            }
+
             /* Ép chiều rộng cho Chart.js trên Mobile để có thể cuộn vuốt */
             .chart-container-inner {
                 min-width: 520px;
@@ -360,8 +374,8 @@
 <body>
     <div class="container">
         <div class="tab-container">
-            <button class="tab-button active" onclick="showTab('generator')">Xem matrix tháng</button>
-            <button class="tab-button" onclick="showTab('generators')">Xem matrix năm</button>
+            <button class="tab-button active" onclick="showTab('generator')">XEM MATRIX THÁNG</button>
+            <button class="tab-button" onclick="showTab('generators')">XEM MATRIX NĂM</button>
         </div>
 
         <div id="generator" class="tab-content active">
@@ -372,20 +386,32 @@
                         max="31" required />
                 </div>
                 <div class="num-input-group">
+                    <label for="numBirthMonth">📅 Tháng sinh:</label>
+                    <input type="number" id="numBirthMonth" class="num-input" placeholder="Nhập tháng sinh" min="1"
+                        max="12" required />
+                </div>
+                <div class="num-input-group">
+                    <label for="numRealBirthYear">📅 Năm sinh:</label>
+                    <input type="number" id="numRealBirthYear" class="num-input" placeholder="Nhập năm sinh" min="1900"
+                        max="2100" required />
+                </div>
+                <div class="num-input-group">
                     <label for="numStartMonth">📅 THÁNG bắt đầu:</label>
                     <input type="number" id="numStartMonth" class="num-input" placeholder="Từ tháng" min="1" max="12"
                         required />
                 </div>
-                <div class="num-input-group">
+
+                <div class="num-input-group" style="display: none;">
                     <label for="numEndMonth">📅 THÁNG kết thúc:</label>
                     <input type="number" id="numEndMonth" class="num-input" placeholder="Tới tháng" min="1" max="12"
-                        required />
+                        value="12" required />
                 </div>
+
                 <div class="num-input-group">
-                    <label for="numBirthYear">📅 Năm muốn xét: <span id="extraYearText"
+                    <label for="numTargetYear">📅 Năm muốn xét: <span id="extraYearText"
                             style="color: var(--accent); font-weight: bold; font-size: 0.9em; margin-left: 5px;"></span></label>
                     <div style="display: flex; gap: 0.5rem;">
-                        <input type="number" id="numBirthYear" class="num-input" placeholder="Nhập năm" min="1900"
+                        <input type="number" id="numTargetYear" class="num-input" placeholder="Nhập năm" min="1900"
                             max="2100" required />
                         <button type="button" onclick="changeExtraYear(1)" class="action-btn"
                             title="Thêm 1 năm">+</button>
@@ -436,14 +462,19 @@
         <div id="generators" class="tab-content">
             <div class="num-form-container">
                 <div class="num-input-group">
-                    <label for="numBirthDates">📅 Ngày sinh :</label>
+                    <label for="numBirthDates">📅 Ngày sinh:</label>
                     <input type="number" id="numBirthDates" class="num-input" placeholder="Nhập ngày sinh" min="1"
                         max="31" required />
                 </div>
                 <div class="num-input-group">
-                    <label for="numStartMonths">📅 Tháng sinh:</label>
-                    <input type="number" id="numStartMonths" class="num-input" placeholder="Nhập tháng sinh" min="1"
+                    <label for="numBirthMonths">📅 Tháng sinh:</label>
+                    <input type="number" id="numBirthMonths" class="num-input" placeholder="Nhập tháng sinh" min="1"
                         max="12" required />
+                </div>
+                <div class="num-input-group">
+                    <label for="numRealBirthYears">📅 Năm sinh:</label>
+                    <input type="number" id="numRealBirthYears" class="num-input" placeholder="Nhập năm sinh" min="1900"
+                        max="2100" required />
                 </div>
                 <div class="num-input-group">
                     <label for="numStartYears">📅 NĂM bắt đầu:</label>
@@ -516,7 +547,7 @@
         // Logic Mở khóa biểu đồ
         function checkChartPassword(tabSuffix) {
             const pwdInput = document.getElementById('chartPwd' + tabSuffix).value;
-            if (pwdInput === 'tshtinhthuc') {
+            if (pwdInput === '3131') {
                 isChartUnlocked = true;
 
                 // Ẩn form nhập pass và show chart cho cả 2 tab (mở khóa 1 lần xem cả 2)
@@ -554,7 +585,7 @@
         function changeExtraYear(amount) {
             extraYearsMonth += amount;
             if (extraYearsMonth < 0) extraYearsMonth = 0;
-            const baseYear = document.getElementById('numBirthYear').value;
+            const baseYear = document.getElementById('numTargetYear').value;
             updateExtraYearText(baseYear);
         }
 
@@ -571,7 +602,7 @@
             }
         }
 
-        document.getElementById('numBirthYear').addEventListener('input', function () {
+        document.getElementById('numTargetYear').addEventListener('input', function () {
             updateExtraYearText(this.value);
         });
 
@@ -602,11 +633,11 @@
             return result;
         }
 
-        // HTML BẢNG SUMMARY
+        // HTML BẢNG SUMMARY (Cập nhật để thêm span cho class title)
         function buildSummaryTablesHTML(headers, dataList, columnLabel) {
             const elements = ["KIM", "MỘC", "THỦY", "HỎA", "THỔ"];
             let table1 = `<div class="table-responsive"><table class="summary-table">
-            <thead><tr><th>Bảng 1: Định lượng</th>`;
+            <thead><tr><th><span class="th-title">Bảng 1:</span> <span class="th-subtitle">Định lượng</span></th>`;
             headers.forEach(h => table1 += `<th>${columnLabel ? columnLabel + ' ' : ''}${h}</th>`);
             table1 += `</tr></thead><tbody>`;
             elements.forEach(el => {
@@ -617,7 +648,7 @@
             table1 += `</tbody></table></div>`;
 
             let table2 = `<div class="table-responsive"><table class="summary-table">
-            <thead><tr><th>Bảng 2: Định tính</th>`;
+            <thead><tr><th><span class="th-title">Bảng 2:</span> <span class="th-subtitle">Định tính</span></th>`;
             headers.forEach(h => table2 += `<th>${columnLabel ? columnLabel + ' ' : ''}${h}</th>`);
             table2 += `</tr></thead><tbody>`;
             elements.forEach(el => {
@@ -646,31 +677,31 @@
                     label: 'KIM',
                     data: dataList.map(d => d.quantitative['KIM']),
                     borderColor: '#FFC107',
-                    borderWidth: 3, pointBackgroundColor: '#FFC107', fill: false, tension: 0 // Đổi tension thành 0
+                    borderWidth: 3, pointBackgroundColor: '#FFC107', fill: false, tension: 0
                 },
                 {
                     label: 'MỘC',
                     data: dataList.map(d => d.quantitative['MỘC']),
                     borderColor: '#00E676',
-                    borderWidth: 3, pointBackgroundColor: '#00E676', fill: false, tension: 0 // Đổi tension thành 0
+                    borderWidth: 3, pointBackgroundColor: '#00E676', fill: false, tension: 0
                 },
                 {
                     label: 'THỦY',
                     data: dataList.map(d => d.quantitative['THỦY']),
                     borderColor: '#00BFFF',
-                    borderWidth: 3, pointBackgroundColor: '#00BFFF', fill: false, tension: 0 // Đổi tension thành 0
+                    borderWidth: 3, pointBackgroundColor: '#00BFFF', fill: false, tension: 0
                 },
                 {
                     label: 'HỎA',
                     data: dataList.map(d => d.quantitative['HỎA']),
                     borderColor: '#FF1744',
-                    borderWidth: 3, pointBackgroundColor: '#FF1744', fill: false, tension: 0 // Đổi tension thành 0
+                    borderWidth: 3, pointBackgroundColor: '#FF1744', fill: false, tension: 0
                 },
                 {
                     label: 'THỔ',
                     data: dataList.map(d => d.quantitative['THỔ']),
                     borderColor: '#FF9100',
-                    borderWidth: 3, pointBackgroundColor: '#FF9100', fill: false, tension: 0 // Đổi tension thành 0
+                    borderWidth: 3, pointBackgroundColor: '#FF9100', fill: false, tension: 0
                 }
             ];
 
@@ -704,7 +735,7 @@
             if (canvasId === 'lineChartMonth') {
                 myChartMonth = newChart;
                 document.getElementById('chartAccordionMonth').style.display = 'block';
-                document.querySelector('#chartAccordionMonth .accordion-content').style.display = 'none'; // reset đóng
+                document.querySelector('#chartAccordionMonth .accordion-content').style.display = 'none';
 
                 if (isChartUnlocked) {
                     document.getElementById('authSectionMonth').style.display = 'none';
@@ -718,7 +749,7 @@
             } else {
                 myChartYear = newChart;
                 document.getElementById('chartAccordionYear').style.display = 'block';
-                document.querySelector('#chartAccordionYear .accordion-content').style.display = 'none'; // reset đóng
+                document.querySelector('#chartAccordionYear .accordion-content').style.display = 'none';
 
                 if (isChartUnlocked) {
                     document.getElementById('authSectionYear').style.display = 'none';
@@ -735,20 +766,24 @@
         // XỬ LÝ TAB THÁNG
         function generateNumerologyDates() {
             const birthDate = parseInt(document.getElementById('numBirthDate').value);
+            const birthMonth = parseInt(document.getElementById('numBirthMonth').value);
+            const realBirthYear = parseInt(document.getElementById('numRealBirthYear').value);
             const startMonth = parseInt(document.getElementById('numStartMonth').value);
             const endMonth = parseInt(document.getElementById('numEndMonth').value);
-            const birthYear = parseInt(document.getElementById('numBirthYear').value);
+            const targetYear = parseInt(document.getElementById('numTargetYear').value);
 
-            if (!birthDate || !startMonth || !endMonth || !birthYear) return alert('Vui lòng nhập đủ ngày, tháng, năm sinh!');
-            if (startMonth > endMonth && extraYearsMonth === 0) return alert('Tháng bắt đầu không được lớn hơn tháng kết thúc!');
+            if (!birthDate || !birthMonth || !realBirthYear || !startMonth || !endMonth || !targetYear)
+                return alert('Vui lòng nhập đủ thông tin!');
+            if (startMonth > endMonth && extraYearsMonth === 0)
+                return alert('Tháng bắt đầu không được lớn hơn tháng kết thúc!');
 
             let datesResult = [];
             let headers = [];
             let dataList = [];
 
-            for (let y = birthYear; y <= birthYear + extraYearsMonth; y++) {
-                let sMonth = (y === birthYear) ? startMonth : 1;
-                let eMonth = (y === birthYear + extraYearsMonth) ? endMonth : 12;
+            for (let y = targetYear; y <= targetYear + extraYearsMonth; y++) {
+                let sMonth = (y === targetYear) ? startMonth : 1;
+                let eMonth = (y === targetYear + extraYearsMonth) ? endMonth : 12;
 
                 for (let month = sMonth; month <= eMonth; month++) {
                     const dateObj = new Date(y, month - 1, birthDate);
@@ -770,12 +805,15 @@
         // XỬ LÝ TAB NĂM
         function generateNumerologyDatesYear() {
             const birthDate = parseInt(document.getElementById('numBirthDates').value);
-            const birthMonth = parseInt(document.getElementById('numStartMonths').value);
+            const birthMonth = parseInt(document.getElementById('numBirthMonths').value);
+            const realBirthYear = parseInt(document.getElementById('numRealBirthYears').value);
             const startYear = parseInt(document.getElementById('numStartYears').value);
             const endYear = parseInt(document.getElementById('numEndYears').value);
 
-            if (!birthDate || !birthMonth || !startYear || !endYear) return alert('Vui lòng nhập đủ ngày, tháng, năm!');
-            if (startYear > endYear) return alert('Năm bắt đầu không được lớn hơn năm kết thúc!');
+            if (!birthDate || !birthMonth || !realBirthYear || !startYear || !endYear)
+                return alert('Vui lòng nhập đủ thông tin!');
+            if (startYear > endYear)
+                return alert('Năm bắt đầu không được lớn hơn năm kết thúc!');
 
             let datesResult = [];
             let headers = [];
