@@ -4,10 +4,31 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thần Số Học Tỉnh Thức</title>
+    <title>Thần Số Học Tỉnh Thức - Multi User</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         /* Biến CSS toàn cục */
+        /* CSS cho phân nhóm bảng theo năm */
+        .year-group-even {
+            background-color: #ffffff !important;
+        }
+
+        .year-group-odd {
+            background-color: #f0f6fb !important;
+        }
+
+        /* Đường kẻ dọc ngăn cách giữa các năm */
+        .year-divider {
+            border-left: 3px solid #bdc3c7 !important;
+        }
+
+        /* Đảm bảo hiệu ứng hover vẫn hoạt động trên các ô có màu nền */
+        .summary-table tbody tr:hover td.year-group-even,
+        .summary-table tbody tr:hover td.year-group-odd {
+            background-color: #e2e8f0 !important;
+            cursor: pointer;
+        }
+
         :root {
             --primary: #2c3e50;
             --secondary: #3498db;
@@ -18,7 +39,25 @@
             --transition: all 0.3s ease;
         }
 
-        /* Reset và thiết lập cơ bản */
+        /* CSS cho phân nhóm bảng theo năm */
+        .year-group-1 {
+            background-color: #ffffff;
+        }
+
+        /* Nền trắng cho năm chẵn */
+        .year-group-2 {
+            background-color: #f0f6fb;
+        }
+
+        /* Nền xanh nhạt cho năm lẻ */
+
+        /* Đảm bảo hiệu ứng hover không bị mất khi có nền màu */
+        .summary-table tbody tr:hover td.year-group-1,
+        .summary-table tbody tr:hover td.year-group-2 {
+            background-color: #e2e8f0;
+            cursor: pointer;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -33,7 +72,6 @@
             padding: 0 10px;
         }
 
-        /* Layout */
         .container {
             max-width: 1200px;
             margin: 0 auto;
@@ -58,6 +96,8 @@
             cursor: pointer;
             transition: var(--transition);
             box-shadow: var(--shadow);
+            flex: 1;
+            text-align: center;
         }
 
         .tab-button:hover {
@@ -70,7 +110,6 @@
             color: white;
         }
 
-        /* Tab Content */
         .tab-content {
             background-color: white;
             padding: 2rem;
@@ -84,22 +123,25 @@
             animation: fadeIn 0.5s ease;
         }
 
-        /* Container cho form numerology */
-        .num-form-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin: 0 auto;
-            padding: 1rem;
-            max-width: 1200px;
+        /* Form Layout */
+        .section-title {
+            margin: 1.5rem 0 1rem;
+            color: var(--primary);
+            border-bottom: 2px solid var(--secondary);
+            padding-bottom: 0.5rem;
+            display: inline-block;
         }
 
-        /* Style cho nhóm input */
-        .num-input-group {
-            position: relative;
+        .num-form-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
             margin-bottom: 1.5rem;
+        }
+
+        .num-input-group {
             background: white;
-            padding: 1.25rem;
+            padding: 1rem;
             border-radius: 12px;
             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
             transition: var(--transition);
@@ -115,12 +157,11 @@
             font-weight: 600;
             color: var(--primary);
             margin-bottom: 0.75rem;
-            font-size: 1rem;
         }
 
         .num-input {
             width: 100%;
-            padding: 0.875rem 1rem;
+            padding: 0.75rem;
             border: 2px solid #e0e0e0;
             border-radius: 8px;
             font-size: 1rem;
@@ -132,7 +173,78 @@
             border-color: var(--secondary);
             background-color: white;
             outline: none;
-            box-shadow: 0 0 0 3px rgba(52, 152, 219, 0.1);
+        }
+
+        /* Person Block Styling */
+        .person-block {
+            background: #fdfdfd;
+            border: 1px solid #e0e0e0;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            position: relative;
+        }
+
+        .person-block-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+
+        .person-block-title {
+            font-weight: bold;
+            color: var(--secondary);
+            font-size: 1.1rem;
+        }
+
+        .remove-btn {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 0.4rem 0.8rem;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .remove-btn:hover {
+            background: #c0392b;
+        }
+
+        /* Buttons */
+        .action-btn {
+            width: 40px;
+            background-color: var(--secondary);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn-add-person {
+            background: #27ae60;
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: bold;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: var(--transition);
+        }
+
+        .btn-add-person:hover {
+            background: #219a52;
+            transform: translateY(-2px);
         }
 
         .num-btn-primary {
@@ -140,51 +252,40 @@
             padding: 1rem;
             border: none;
             border-radius: 8px;
-            font-size: 1rem;
-            font-weight: 600;
+            font-size: 1.1rem;
+            font-weight: bold;
             background: linear-gradient(135deg, var(--secondary), #2980b9);
             color: white;
             cursor: pointer;
-            transition: var(--transition);
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-bottom: 1rem;
         }
 
-        .num-btn-primary:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+        /* Result Area */
+        .person-result-box {
+            border: 2px solid var(--secondary);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-top: 2rem;
+            background: #fff;
         }
 
-        /* Nút Action (+/-) cho năm */
-        .action-btn {
-            width: 45px;
-            background-color: var(--secondary);
+        .person-result-title {
+            background: var(--secondary);
             color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.5rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: var(--transition);
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            display: inline-block;
+            padding: 0.5rem 1.5rem;
+            border-radius: 20px;
+            margin-top: -2.5rem;
+            margin-bottom: 1rem;
         }
 
-        .action-btn:hover {
-            background-color: #2980b9;
-        }
-
-        .action-btn:active {
-            transform: scale(0.95);
-        }
-
-        /* Bảng Summary */
+        /* Tables & Charts */
         .table-responsive {
             width: 100%;
             overflow-x: auto;
-            margin-bottom: 2rem;
+            margin-bottom: 1.5rem;
             border-radius: 8px;
             box-shadow: var(--shadow);
         }
@@ -199,7 +300,7 @@
         .summary-table th,
         .summary-table td {
             border: 1px solid #e0e0e0;
-            padding: 10px 15px;
+            padding: 10px;
             text-align: center;
             white-space: nowrap;
         }
@@ -207,7 +308,6 @@
         .summary-table th {
             background-color: var(--primary);
             color: white;
-            font-weight: 600;
         }
 
         .summary-table th:first-child,
@@ -219,75 +319,57 @@
             z-index: 1;
         }
 
-        .summary-table th:first-child {
-            background-color: var(--primary);
-        }
-
-        .summary-table tbody tr:hover td {
-            background-color: #f1f5f8;
-        }
-
-        /* Các class cho Table Title để xử lý xuống dòng */
-        .th-title,
-        .th-subtitle {
-            display: inline;
-        }
-
-        /* Biểu đồ biến thiên CSS */
         .chart-wrapper {
             width: 100%;
             overflow-x: auto;
-            /* Cho phép cuộn ngang */
+            margin-top: 1rem;
         }
 
         .chart-container-inner {
             position: relative;
-            height: 400px;
+            height: 350px;
             width: 100%;
+            min-width: 500px;
         }
 
-        /* Form bảo mật Chart */
         .auth-section {
             text-align: center;
             padding: 2rem 1rem;
             background-color: #f8f9fa;
             border-radius: 8px;
             border: 1px dashed #ccc;
+            margin-top: 1rem;
         }
 
         /* Accordion */
         .accordion {
-            margin-top: 1.5rem;
-            margin-bottom: 1rem;
-            border-radius: 10px;
+            margin-top: 1rem;
+            border-radius: 8px;
             overflow: hidden;
             box-shadow: var(--shadow);
         }
 
         .accordion-header {
-            background-color: var(--primary);
-            color: white;
+            background-color: #ecf0f1;
+            color: var(--primary);
             padding: 1rem;
             cursor: pointer;
             display: flex;
             justify-content: space-between;
-            align-items: center;
             font-weight: 600;
-            transition: var(--transition);
         }
 
         .accordion-header:hover {
-            background-color: #34495e;
+            background-color: #dfe6e9;
         }
 
         .accordion-content {
-            background-color: white;
             padding: 1.5rem;
             display: none;
-            /* Mặc định ẩn nội dung */
+            background: white;
         }
 
-        /* Bảng ma trận & ngũ hành bên trong accordion */
+        /* Matrix Tables */
         .inner-table {
             width: 250px;
             border-collapse: collapse;
@@ -298,74 +380,32 @@
             overflow: hidden;
         }
 
-        .inner-table th,
         .inner-table td {
             text-align: center;
             border: 1px solid #e0e0e0;
             padding: 0.75rem;
-            font-size: 0.95rem;
-            transition: background-color 0.2s ease;
-        }
-
-        .matrix-table {
-            margin-bottom: 2rem;
+            transition: 0.2s;
         }
 
         .matrix-table td {
             width: 80px;
             height: 80px;
-            font-weight: 500;
+            font-weight: bold;
+            font-size: 1.2rem;
         }
 
         .element-table {
-            width: 200px;
+            width: auto;
+            min-width: 250px;
         }
 
-        .element-table td {
-            width: 100px;
-            height: 40px;
-            padding: 0.5rem;
-        }
-
-        .element-table td:first-child {
-            background-color: #f8f9fa;
-            font-weight: 600;
-            width: 80px;
-        }
-
-        .inner-table td:hover {
-            background-color: #f5f5f5;
-        }
-
-        /* Responsive mobile */
         @media (max-width: 768px) {
-            .container {
-                padding: 1rem;
-            }
-
             .tab-container {
                 flex-direction: column;
             }
 
-            .tab-button {
-                width: 100%;
-                text-align: center;
-            }
-
             .num-form-container {
                 grid-template-columns: 1fr;
-            }
-
-            /* Chia 2 dòng trên Mobile cho Title bảng */
-            .th-title,
-            .th-subtitle {
-                display: block;
-                line-height: 1.4;
-            }
-
-            /* Ép chiều rộng cho Chart.js trên Mobile để có thể cuộn vuốt */
-            .chart-container-inner {
-                min-width: 520px;
             }
         }
     </style>
@@ -379,551 +419,390 @@
         </div>
 
         <div id="generator" class="tab-content active">
+            <h3 class="section-title">⏳ Thông tin thời gian</h3>
             <div class="num-form-container">
                 <div class="num-input-group">
-                    <label for="numBirthDate">📅 Ngày sinh:</label>
-                    <input type="number" id="numBirthDate" class="num-input" placeholder="Nhập ngày sinh" min="1"
-                        max="31" required />
+                    <label>📅 THÁNG bắt đầu:</label>
+                    <input type="number" id="numStartMonth" class="num-input" value="" min="1" max="12" />
                 </div>
-                <div class="num-input-group">
-                    <label for="numBirthMonth">📅 Tháng sinh:</label>
-                    <input type="number" id="numBirthMonth" class="num-input" placeholder="Nhập tháng sinh" min="1"
-                        max="12" required />
-                </div>
-                <div class="num-input-group">
-                    <label for="numRealBirthYear">📅 Năm sinh:</label>
-                    <input type="number" id="numRealBirthYear" class="num-input" placeholder="Nhập năm sinh" min="1900"
-                        max="2100" required />
-                </div>
-                <div class="num-input-group">
-                    <label for="numStartMonth">📅 THÁNG bắt đầu:</label>
-                    <input type="number" id="numStartMonth" class="num-input" placeholder="Từ tháng" min="1" max="12"
-                        required />
-                </div>
-
                 <div class="num-input-group" style="display: none;">
-                    <label for="numEndMonth">📅 THÁNG kết thúc:</label>
-                    <input type="number" id="numEndMonth" class="num-input" placeholder="Tới tháng" min="1" max="12"
-                        value="12" required />
+                    <label>📅 THÁNG kết thúc:</label>
+                    <input type="number" id="numEndMonth" class="num-input" value="12" min="1" max="12" />
                 </div>
-
                 <div class="num-input-group">
-                    <label for="numTargetYear">📅 Năm muốn xét: <span id="extraYearText"
-                            style="color: var(--accent); font-weight: bold; font-size: 0.9em; margin-left: 5px;"></span></label>
+                    <label>📅 Năm muốn xét: <span id="extraYearTextMonth"
+                            style="color: var(--accent); font-size: 0.9em;"></span></label>
                     <div style="display: flex; gap: 0.5rem;">
-                        <input type="number" id="numTargetYear" class="num-input" placeholder="Nhập năm" min="1900"
-                            max="2100" required />
-                        <button type="button" onclick="changeExtraYear(1)" class="action-btn"
+                        <input type="number" id="numTargetYear" class="num-input" value="" />
+                        <button type="button" onclick="changeExtraYear('Month', 1)" class="action-btn"
                             title="Thêm 1 năm">+</button>
-                        <button type="button" onclick="changeExtraYear(-1)" class="action-btn"
+                        <button type="button" onclick="changeExtraYear('Month', -1)" class="action-btn"
                             style="background-color: #95a5a6;" title="Giảm 1 năm">-</button>
                     </div>
                 </div>
             </div>
 
-            <button class="num-btn-primary" onclick="generateNumerologyDates()">KẾT QUẢ</button>
-
-            <div id="summaryContainerMonth"></div>
-
-            <div id="chartAccordionMonth" class="accordion" style="display: none;">
-                <div class="accordion-header" onclick="toggleAccordionContent(this)">
-                    📈 Xem Biểu Đồ Biến Thiên Ngũ Hành <span>▼</span>
-                </div>
-                <div class="accordion-content" style="padding: 1rem;">
-
-                    <div id="authSectionMonth" class="auth-section">
-                        <p style="margin-bottom: 1rem; font-weight: 600; color: var(--primary);">🔒 Vui lòng nhập mật
-                            khẩu để xem biểu đồ</p>
-                        <div
-                            style="display: flex; gap: 0.5rem; justify-content: center; max-width: 400px; margin: 0 auto;">
-                            <input type="password" id="chartPwdMonth" class="num-input" placeholder="Nhập mật khẩu..."
-                                style="margin-bottom: 0; padding: 0.5rem 1rem;"
-                                onkeypress="if(event.key === 'Enter') checkChartPassword('Month')" />
-                            <button type="button" onclick="checkChartPassword('Month')" class="num-btn-primary"
-                                style="padding: 0.5rem 1.5rem; width: auto; margin-bottom: 0;">Mở khóa</button>
-                        </div>
-                        <p id="pwdErrorMonth"
-                            style="color: var(--accent); font-size: 0.9rem; margin-top: 0.5rem; display: none;">Mật khẩu
-                            không chính xác!</p>
-                    </div>
-
-                    <div id="chartWrapperMonth" class="chart-wrapper" style="display: none;">
-                        <div class="chart-container-inner">
-                            <canvas id="lineChartMonth"></canvas>
-                        </div>
-                    </div>
-
-                </div>
+            <h3 class="section-title">👥 Danh sách người xem</h3>
+            <div id="peopleContainerMonth">
             </div>
 
-            <div id="resultContainerMonth"></div>
+            <button class="btn-add-person" onclick="addPerson('Month')">
+                👤 Thêm người tra cứu
+            </button>
+
+            <button class="num-btn-primary" onclick="generateMulti('Month')">KẾT QUẢ SO SÁNH</button>
+            <div id="resultGlobalMonth"></div>
         </div>
 
         <div id="generators" class="tab-content">
+            <h3 class="section-title">⏳ Thông tin thời gian</h3>
             <div class="num-form-container">
                 <div class="num-input-group">
-                    <label for="numBirthDates">📅 Ngày sinh:</label>
-                    <input type="number" id="numBirthDates" class="num-input" placeholder="Nhập ngày sinh" min="1"
-                        max="31" required />
+                    <label>📅 NĂM bắt đầu:</label>
+                    <input type="number" id="numStartYear" class="num-input" value="" />
                 </div>
                 <div class="num-input-group">
-                    <label for="numBirthMonths">📅 Tháng sinh:</label>
-                    <input type="number" id="numBirthMonths" class="num-input" placeholder="Nhập tháng sinh" min="1"
-                        max="12" required />
-                </div>
-                <div class="num-input-group">
-                    <label for="numRealBirthYears">📅 Năm sinh:</label>
-                    <input type="number" id="numRealBirthYears" class="num-input" placeholder="Nhập năm sinh" min="1900"
-                        max="2100" required />
-                </div>
-                <div class="num-input-group">
-                    <label for="numStartYears">📅 NĂM bắt đầu:</label>
-                    <input type="number" id="numStartYears" class="num-input" placeholder="Từ năm" min="1900" max="2100"
-                        required />
-                </div>
-                <div class="num-input-group">
-                    <label for="numEndYears">📅 NĂM kết thúc:</label>
-                    <input type="number" id="numEndYears" class="num-input" placeholder="Tới năm" min="1900" max="2100"
-                        required />
+                    <label>📅 NĂM kết thúc:</label>
+                    <input type="number" id="numEndYear" class="num-input" value="" />
                 </div>
             </div>
 
-            <button class="num-btn-primary" onclick="generateNumerologyDatesYear()">KẾT QUẢ</button>
-
-            <div id="summaryContainerYear"></div>
-
-            <div id="chartAccordionYear" class="accordion" style="display: none;">
-                <div class="accordion-header" onclick="toggleAccordionContent(this)">
-                    📈 Xem Biểu Đồ Biến Thiên Ngũ Hành <span>▼</span>
-                </div>
-                <div class="accordion-content" style="padding: 1rem;">
-
-                    <div id="authSectionYear" class="auth-section">
-                        <p style="margin-bottom: 1rem; font-weight: 600; color: var(--primary);">🔒 Vui lòng nhập mật
-                            khẩu để xem biểu đồ</p>
-                        <div
-                            style="display: flex; gap: 0.5rem; justify-content: center; max-width: 400px; margin: 0 auto;">
-                            <input type="password" id="chartPwdYear" class="num-input" placeholder="Nhập mật khẩu..."
-                                style="margin-bottom: 0; padding: 0.5rem 1rem;"
-                                onkeypress="if(event.key === 'Enter') checkChartPassword('Year')" />
-                            <button type="button" onclick="checkChartPassword('Year')" class="num-btn-primary"
-                                style="padding: 0.5rem 1.5rem; width: auto; margin-bottom: 0;">Mở khóa</button>
-                        </div>
-                        <p id="pwdErrorYear"
-                            style="color: var(--accent); font-size: 0.9rem; margin-top: 0.5rem; display: none;">Mật khẩu
-                            không chính xác!</p>
-                    </div>
-
-                    <div id="chartWrapperYear" class="chart-wrapper" style="display: none;">
-                        <div class="chart-container-inner">
-                            <canvas id="lineChartYear"></canvas>
-                        </div>
-                    </div>
-
-                </div>
+            <h3 class="section-title">👥 Danh sách người xem</h3>
+            <div id="peopleContainerYear">
             </div>
 
-            <div id="resultContainerYear"></div>
+            <button class="btn-add-person" onclick="addPerson('Year')">
+                👤 Thêm người tra cứu
+            </button>
+
+            <button class="num-btn-primary" onclick="generateMulti('Year')">KẾT QUẢ SO SÁNH</button>
+            <div id="resultGlobalYear"></div>
         </div>
     </div>
 
     <script>
-        // Hàm dùng chung cho các Accordion (ẩn/hiện)
-        function toggleAccordionContent(element) {
-            const content = element.nextElementSibling;
-            content.style.display = content.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // Logic Tab
+        // --- QUẢN LÝ TAB & UI CHUNG ---
         function showTab(tabId) {
             document.querySelectorAll('.tab-content, .tab-button').forEach(el => el.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
             document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
         }
 
-        // Biến lưu trạng thái mở khóa mật khẩu chart
-        let isChartUnlocked = false;
-
-        // Logic Mở khóa biểu đồ
-        function checkChartPassword(tabSuffix) {
-            const pwdInput = document.getElementById('chartPwd' + tabSuffix).value;
-            if (pwdInput === '3131') {
-                isChartUnlocked = true;
-
-                // Ẩn form nhập pass và show chart cho cả 2 tab (mở khóa 1 lần xem cả 2)
-                document.getElementById('authSectionMonth').style.display = 'none';
-                document.getElementById('chartWrapperMonth').style.display = 'block';
-                document.getElementById('authSectionYear').style.display = 'none';
-                document.getElementById('chartWrapperYear').style.display = 'block';
-
-                // Resize biểu đồ để tránh lỗi scale khi đổi từ display:none sang block
-                if (myChartMonth) myChartMonth.resize();
-                if (myChartYear) myChartYear.resize();
-
-            } else {
-                document.getElementById('pwdError' + tabSuffix).style.display = 'block';
-            }
+        function toggleAccordionContent(element) {
+            const content = element.nextElementSibling;
+            content.style.display = content.style.display === 'block' ? 'none' : 'block';
         }
 
-        // Hỗ Trợ Phím Enter
-        document.addEventListener('keydown', function (event) {
-            if (event.key === 'Enter') {
-                const activeElement = document.activeElement;
-                // Tránh việc nhấn Enter trong ô mật khẩu kích hoạt hàm KẾT QUẢ
-                if (activeElement.id === 'chartPwdMonth' || activeElement.id === 'chartPwdYear') return;
+        // --- QUẢN LÝ THÊM/XÓA NGƯỜI ---
+        let personCounters = { Month: 0, Year: 0 };
 
-                if (document.getElementById('generator').classList.contains('active')) {
-                    generateNumerologyDates();
-                } else if (document.getElementById('generators').classList.contains('active')) {
-                    generateNumerologyDatesYear();
-                }
-            }
-        });
+        function addPerson(tabType) {
+            personCounters[tabType]++;
+            const pId = personCounters[tabType];
+            const container = document.getElementById(`peopleContainer${tabType}`);
 
-        // Logic Quản Lý "+ NĂM" cho Tab Tháng
+            const block = document.createElement('div');
+            block.className = 'person-block';
+            block.id = `personBlock_${tabType}_${pId}`;
+
+            block.innerHTML = `
+                <div class="person-block-header">
+                    <div class="person-block-title">Người thứ ${pId}</div>
+                    ${pId > 1 ? `<button class="remove-btn" onclick="removePerson('${tabType}', ${pId})">🗑️ Xóa</button>` : ''}
+                </div>
+                <div class="num-form-container" style="margin-bottom: 0;">
+                    <div class="num-input-group">
+                        <label>Ngày sinh:</label>
+                        <input type="number" class="num-input p-day" placeholder="DD" min="1" max="31" required />
+                    </div>
+                    <div class="num-input-group">
+                        <label>Tháng sinh:</label>
+                        <input type="number" class="num-input p-month" placeholder="MM" min="1" max="12" required />
+                    </div>
+                    <div class="num-input-group">
+                        <label>Năm sinh:</label>
+                        <input type="number" class="num-input p-year" placeholder="YYYY" required />
+                    </div>
+                    <div class="num-input-group">
+                        <label>Tên hiển thị (Tùy chọn):</label>
+                        <input type="text" class="num-input p-name" placeholder="VD: Nam, Tuấn..." />
+                    </div>
+                </div>
+            `;
+            container.appendChild(block);
+        }
+
+        function removePerson(tabType, id) {
+            const block = document.getElementById(`personBlock_${tabType}_${id}`);
+            if (block) block.remove();
+        }
+
+        // --- QUẢN LÝ NĂM TĂNG CƯỜNG (+/-) CHO TAB THÁNG ---
         let extraYearsMonth = 0;
-        function changeExtraYear(amount) {
-            extraYearsMonth += amount;
-            if (extraYearsMonth < 0) extraYearsMonth = 0;
-            const baseYear = document.getElementById('numTargetYear').value;
-            updateExtraYearText(baseYear);
-        }
-
-        function updateExtraYearText(baseYear) {
-            const textEl = document.getElementById('extraYearText');
-            if (extraYearsMonth === 0) {
-                textEl.innerText = "";
-            } else {
-                if (baseYear) {
-                    textEl.innerText = `(Kéo dài tới năm ${parseInt(baseYear) + extraYearsMonth})`;
-                } else {
-                    textEl.innerText = `(+${extraYearsMonth} năm)`;
-                }
+        function changeExtraYear(tabType, amount) {
+            if (tabType === 'Month') {
+                extraYearsMonth += amount;
+                if (extraYearsMonth < 0) extraYearsMonth = 0;
+                const baseYear = document.getElementById('numTargetYear').value;
+                const textEl = document.getElementById('extraYearTextMonth');
+                textEl.innerText = extraYearsMonth > 0 ? `(Tới năm ${parseInt(baseYear) + extraYearsMonth})` : "";
             }
         }
 
-        document.getElementById('numTargetYear').addEventListener('input', function () {
-            updateExtraYearText(this.value);
-        });
-
-        // QUY TẮC NGŨ HÀNH
-        const NGU_HANH_RULES = {
-            "KIM": [1, 2, 3, 5, 6, 9],
-            "MỘC": [1, 4, 5, 7, 8, 9],
-            "THỦY": [1, 2, 3, 4, 5, 7],
-            "HỎA": [3, 5, 6, 7, 8, 9],
-            "THỔ": [4, 5, 6]
+        // Khởi tạo người đầu tiên khi load web
+        window.onload = () => {
+            addPerson('Month');
+            addPerson('Year');
         };
 
-        function getElementValue(numbers, cells, isQualitative) {
-            if (isQualitative) {
-                return cells.map(cell => numbers[cell]).filter(v => v !== "").join(" ");
+        // --- BẢO MẬT & CHART.JS ---
+        let isChartUnlocked = false;
+        let chartInstances = {}; // Lưu trữ biểu đồ: { 'Month_1': chartObj, ... }
+
+        function checkGlobalPassword(tabType) {
+            const pwd = document.getElementById(`chartPwd${tabType}`).value;
+            if (pwd === '3131') {
+                isChartUnlocked = true;
+                // Mở khóa toàn bộ
+                document.querySelectorAll('.auth-section').forEach(el => el.style.display = 'none');
+                document.querySelectorAll('.chart-wrapper').forEach(el => el.style.display = 'block');
+                // Resize lại chart
+                Object.values(chartInstances).forEach(chart => chart.resize());
             } else {
-                return cells.reduce((sum, cell) => sum + (numbers[cell] ? numbers[cell].length : 0), 0);
+                alert('Mật khẩu không chính xác!');
             }
         }
 
-        function calculateElementsForDate(day, month, year) {
-            const numbers = calculateNumbers(day, month, year);
-            const result = { quantitative: {}, qualitative: {}, originalNumbers: numbers };
-            for (const [element, cells] of Object.entries(NGU_HANH_RULES)) {
-                result.quantitative[element] = getElementValue(numbers, cells, false);
-                result.qualitative[element] = getElementValue(numbers, cells, true);
-            }
-            return result;
-        }
+        // --- QUY TẮC TÍNH TOÁN ---
+        const NGU_HANH_RULES = {
+            "KIM": [1, 2, 3, 5, 6, 9], "MỘC": [1, 4, 5, 7, 8, 9],
+            "THỦY": [1, 2, 3, 4, 5, 7], "HỎA": [3, 5, 6, 7, 8, 9], "THỔ": [4, 5, 6]
+        };
 
-        // HTML BẢNG SUMMARY (Cập nhật để thêm span cho class title)
-        function buildSummaryTablesHTML(headers, dataList, columnLabel) {
-            const elements = ["KIM", "MỘC", "THỦY", "HỎA", "THỔ"];
-            let table1 = `<div class="table-responsive"><table class="summary-table">
-            <thead><tr><th><span class="th-title">Bảng 1:</span> <span class="th-subtitle">Định lượng</span></th>`;
-            headers.forEach(h => table1 += `<th>${columnLabel ? columnLabel + ' ' : ''}${h}</th>`);
-            table1 += `</tr></thead><tbody>`;
-            elements.forEach(el => {
-                table1 += `<tr><td><strong>${el}</strong></td>`;
-                dataList.forEach(data => table1 += `<td>${data.quantitative[el]}</td>`);
-                table1 += `</tr>`;
-            });
-            table1 += `</tbody></table></div>`;
-
-            let table2 = `<div class="table-responsive"><table class="summary-table">
-            <thead><tr><th><span class="th-title">Bảng 2:</span> <span class="th-subtitle">Định tính</span></th>`;
-            headers.forEach(h => table2 += `<th>${columnLabel ? columnLabel + ' ' : ''}${h}</th>`);
-            table2 += `</tr></thead><tbody>`;
-            elements.forEach(el => {
-                table2 += `<tr><td><strong>${el}</strong></td>`;
-                dataList.forEach(data => table2 += `<td>${data.qualitative[el] || "-"}</td>`);
-                table2 += `</tr>`;
-            });
-            table2 += `</tbody></table></div>`;
-
-            return table1 + table2;
-        }
-
-        // BIẾN LƯU TRỮ CHART CŨ
-        let myChartMonth = null;
-        let myChartYear = null;
-
-        // HÀM VẼ BIỂU ĐỒ ĐƯỜNG GẤP KHÚC (TENSION = 0)
-        function renderLineChart(headers, dataList, canvasId, labelPrefix) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-
-            if (canvasId === 'lineChartMonth' && myChartMonth) myChartMonth.destroy();
-            if (canvasId === 'lineChartYear' && myChartYear) myChartYear.destroy();
-
-            const datasets = [
-                {
-                    label: 'KIM',
-                    data: dataList.map(d => d.quantitative['KIM']),
-                    borderColor: '#FFC107',
-                    borderWidth: 3, pointBackgroundColor: '#FFC107', fill: false, tension: 0
-                },
-                {
-                    label: 'MỘC',
-                    data: dataList.map(d => d.quantitative['MỘC']),
-                    borderColor: '#00E676',
-                    borderWidth: 3, pointBackgroundColor: '#00E676', fill: false, tension: 0
-                },
-                {
-                    label: 'THỦY',
-                    data: dataList.map(d => d.quantitative['THỦY']),
-                    borderColor: '#00BFFF',
-                    borderWidth: 3, pointBackgroundColor: '#00BFFF', fill: false, tension: 0
-                },
-                {
-                    label: 'HỎA',
-                    data: dataList.map(d => d.quantitative['HỎA']),
-                    borderColor: '#FF1744',
-                    borderWidth: 3, pointBackgroundColor: '#FF1744', fill: false, tension: 0
-                },
-                {
-                    label: 'THỔ',
-                    data: dataList.map(d => d.quantitative['THỔ']),
-                    borderColor: '#FF9100',
-                    borderWidth: 3, pointBackgroundColor: '#FF9100', fill: false, tension: 0
-                }
-            ];
-
-            const chartConfig = {
-                type: 'line',
-                data: {
-                    labels: headers.map(h => (labelPrefix ? labelPrefix + ' ' : '') + h),
-                    datasets: datasets
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    plugins: {
-                        legend: { position: 'top' },
-                        title: { display: true, text: 'Biểu đồ biến thiên Ngũ Hành (Định lượng)' }
-                    },
-                    scales: {
-                        x: {
-                            grid: { display: false }
-                        },
-                        y: {
-                            beginAtZero: true,
-                            grid: { color: '#f0f0f0' }
-                        }
-                    }
-                }
-            };
-
-            const newChart = new Chart(ctx, chartConfig);
-
-            if (canvasId === 'lineChartMonth') {
-                myChartMonth = newChart;
-                document.getElementById('chartAccordionMonth').style.display = 'block';
-                document.querySelector('#chartAccordionMonth .accordion-content').style.display = 'none';
-
-                if (isChartUnlocked) {
-                    document.getElementById('authSectionMonth').style.display = 'none';
-                    document.getElementById('chartWrapperMonth').style.display = 'block';
-                } else {
-                    document.getElementById('authSectionMonth').style.display = 'block';
-                    document.getElementById('chartWrapperMonth').style.display = 'none';
-                    document.getElementById('chartPwdMonth').value = '';
-                    document.getElementById('pwdErrorMonth').style.display = 'none';
-                }
-            } else {
-                myChartYear = newChart;
-                document.getElementById('chartAccordionYear').style.display = 'block';
-                document.querySelector('#chartAccordionYear .accordion-content').style.display = 'none';
-
-                if (isChartUnlocked) {
-                    document.getElementById('authSectionYear').style.display = 'none';
-                    document.getElementById('chartWrapperYear').style.display = 'block';
-                } else {
-                    document.getElementById('authSectionYear').style.display = 'block';
-                    document.getElementById('chartWrapperYear').style.display = 'none';
-                    document.getElementById('chartPwdYear').value = '';
-                    document.getElementById('pwdErrorYear').style.display = 'none';
-                }
-            }
-        }
-
-        // XỬ LÝ TAB THÁNG
-        function generateNumerologyDates() {
-            const birthDate = parseInt(document.getElementById('numBirthDate').value);
-            const birthMonth = parseInt(document.getElementById('numBirthMonth').value);
-            const realBirthYear = parseInt(document.getElementById('numRealBirthYear').value);
-            const startMonth = parseInt(document.getElementById('numStartMonth').value);
-            const endMonth = parseInt(document.getElementById('numEndMonth').value);
-            const targetYear = parseInt(document.getElementById('numTargetYear').value);
-
-            if (!birthDate || !birthMonth || !realBirthYear || !startMonth || !endMonth || !targetYear)
-                return alert('Vui lòng nhập đủ thông tin!');
-            if (startMonth > endMonth && extraYearsMonth === 0)
-                return alert('Tháng bắt đầu không được lớn hơn tháng kết thúc!');
-
-            let datesResult = [];
-            let headers = [];
-            let dataList = [];
-
-            for (let y = targetYear; y <= targetYear + extraYearsMonth; y++) {
-                let sMonth = (y === targetYear) ? startMonth : 1;
-                let eMonth = (y === targetYear + extraYearsMonth) ? endMonth : 12;
-
-                for (let month = sMonth; month <= eMonth; month++) {
-                    const dateObj = new Date(y, month - 1, birthDate);
-                    datesResult.push(`${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()}`);
-
-                    let headerVal = extraYearsMonth > 0 ? `${month}/${y}` : month;
-                    headers.push(headerVal);
-                    dataList.push(calculateElementsForDate(birthDate, month, y));
-                }
-            }
-
-            let label = extraYearsMonth > 0 ? "" : "Tháng";
-            document.getElementById('summaryContainerMonth').innerHTML = buildSummaryTablesHTML(headers, dataList, label);
-
-            renderLineChart(headers, dataList, 'lineChartMonth', label);
-            renderMatrixFromDataList(datesResult, dataList, 'resultContainerMonth');
-        }
-
-        // XỬ LÝ TAB NĂM
-        function generateNumerologyDatesYear() {
-            const birthDate = parseInt(document.getElementById('numBirthDates').value);
-            const birthMonth = parseInt(document.getElementById('numBirthMonths').value);
-            const realBirthYear = parseInt(document.getElementById('numRealBirthYears').value);
-            const startYear = parseInt(document.getElementById('numStartYears').value);
-            const endYear = parseInt(document.getElementById('numEndYears').value);
-
-            if (!birthDate || !birthMonth || !realBirthYear || !startYear || !endYear)
-                return alert('Vui lòng nhập đủ thông tin!');
-            if (startYear > endYear)
-                return alert('Năm bắt đầu không được lớn hơn năm kết thúc!');
-
-            let datesResult = [];
-            let headers = [];
-            let dataList = [];
-
-            for (let year = startYear; year <= endYear; year++) {
-                const dateObj = new Date(year, birthMonth - 1, birthDate);
-                datesResult.push(`${dateObj.getDate()}/${dateObj.getMonth() + 1}/${dateObj.getFullYear()}`);
-
-                headers.push(year);
-                dataList.push(calculateElementsForDate(birthDate, birthMonth, year));
-            }
-
-            document.getElementById('summaryContainerYear').innerHTML = buildSummaryTablesHTML(headers, dataList, "Năm");
-
-            renderLineChart(headers, dataList, 'lineChartYear', "Năm");
-            renderMatrixFromDataList(datesResult, dataList, 'resultContainerYear');
-        }
-
-        // RENDER CHI TIẾT CÁC NGÀY ĐỒNG BỘ MÀU VỚI CHART
-        function renderMatrixFromDataList(dateStrings, dataList, containerId) {
-            const resultContainer = document.getElementById(containerId);
-            resultContainer.innerHTML = '';
-
-            dateStrings.forEach((dateStr, index) => {
-                const data = dataList[index];
-                const numbers = data.originalNumbers;
-                const quant = data.quantitative;
-
-                const elementsArr = [
-                    { name: "KIM", value: quant["KIM"], color: "#FFC107" },
-                    { name: "MỘC", value: quant["MỘC"], color: "#00E676" },
-                    { name: "THỦY", value: quant["THỦY"], color: "#00BFFF" },
-                    { name: "HỎA", value: quant["HỎA"], color: "#FF1744" },
-                    { name: "THỔ", value: quant["THỔ"], color: "#FF9100" }
-                ];
-                elementsArr.sort((a, b) => a.value - b.value);
-
-                const accordion = document.createElement('div');
-                accordion.className = 'accordion';
-
-                const header = document.createElement('div');
-                header.className = 'accordion-header';
-                header.innerHTML = `📅 Chi tiết ma trận: ${dateStr} <span>▼</span>`;
-                header.onclick = function () {
-                    toggleAccordionContent(this);
-                };
-
-                const content = document.createElement('div');
-                content.className = 'accordion-content';
-
-                let matrixTable = `
-                <table class="inner-table matrix-table">
-                    <tr><td>${numbers[3]}</td><td>${numbers[6]}</td><td>${numbers[9]}</td></tr>
-                    <tr><td>${numbers[2]}</td><td>${numbers[5]}</td><td>${numbers[8]}</td></tr>
-                    <tr><td>${numbers[1]}</td><td>${numbers[4]}</td><td>${numbers[7]}</td></tr>
-                </table>
-            `;
-
-                let elementsTable = `<table class="inner-table element-table"><tr>`;
-                for (let i = elementsArr.length - 1; i >= 0; i--) {
-                    const el = elementsArr[i];
-                    elementsTable += `
-                    <td>
-                        <span style="color: ${el.color}; font-size: 1.2rem; display: block; text-shadow: 0px 0px 1px rgba(0,0,0,0.2);">${el.value}</span>
-                        <span style="color: ${el.color}; font-weight: 700; text-shadow: 0px 0px 1px rgba(0,0,0,0.2);">${el.name}</span>
-                    </td>`;
-                }
-                elementsTable += `</tr></table>`;
-
-                content.innerHTML = matrixTable + elementsTable;
-                accordion.appendChild(header);
-                accordion.appendChild(content);
-                resultContainer.appendChild(accordion);
-            });
-        }
-
-        // TÍNH TOÁN CORE CON SỐ
-        function calculateNumbers(birthDate, birthMonth, birthYear) {
-            const dateDigits = Array.from(
-                birthYear.toString() + birthMonth.toString().padStart(2, '0') + birthDate.toString().padStart(2, '0')
-            ).map(Number);
-
+        function calculateNumbers(d, m, y) {
+            const dateStr = y.toString() + m.toString().padStart(2, '0') + d.toString().padStart(2, '0');
+            const dateDigits = Array.from(dateStr).map(Number);
             const digitCount = Array(10).fill(0);
-            dateDigits.forEach(num => digitCount[num]++);
 
+            dateDigits.forEach(num => digitCount[num]++);
             const sum = dateDigits.reduce((a, b) => a + b, 0);
             Array.from(sum.toString()).map(Number).forEach(num => digitCount[num]++);
-
             const secondNum = Array.from(sum.toString()).reduce((a, b) => a + Number(b), 0);
             Array.from(secondNum.toString()).map(Number).forEach(num => digitCount[num]++);
-
-            const thirdNum = sum - (2 * (birthDate < 10 ? birthDate : Math.floor(birthDate / 10)));
+            const thirdNum = sum - (2 * (d < 10 ? d : Math.floor(d / 10)));
             Array.from(thirdNum.toString()).map(Number).forEach(num => digitCount[num]++);
-
             const fourthNum = Array.from(thirdNum.toString()).reduce((a, b) => a + Number(b), 0);
             Array.from(fourthNum.toString()).map(Number).forEach(num => digitCount[num]++);
 
-            return {
-                1: digitCount[1] ? '1'.repeat(digitCount[1]) : '',
-                2: digitCount[2] ? '2'.repeat(digitCount[2]) : '',
-                3: digitCount[3] ? '3'.repeat(digitCount[3]) : '',
-                4: digitCount[4] ? '4'.repeat(digitCount[4]) : '',
-                5: digitCount[5] ? '5'.repeat(digitCount[5]) : '',
-                6: digitCount[6] ? '6'.repeat(digitCount[6]) : '',
-                7: digitCount[7] ? '7'.repeat(digitCount[7]) : '',
-                8: digitCount[8] ? '8'.repeat(digitCount[8]) : '',
-                9: digitCount[9] ? '9'.repeat(digitCount[9]) : ''
-            };
+            let res = {};
+            for (let i = 1; i <= 9; i++) res[i] = digitCount[i] ? i.toString().repeat(digitCount[i]) : '';
+            return res;
         }
+
+        function calculateElementsForDate(d, m, y) {
+            const numbers = calculateNumbers(d, m, y);
+            let quant = {}, qual = {};
+            for (const [el, cells] of Object.entries(NGU_HANH_RULES)) {
+                quant[el] = cells.reduce((sum, c) => sum + (numbers[c] ? numbers[c].length : 0), 0);
+                qual[el] = cells.map(c => numbers[c]).filter(v => v !== "").join(" ");
+            }
+            return { quantitative: quant, qualitative: qual, originalNumbers: numbers };
+        }
+
+        // --- HÀM TẠO GIAO DIỆN KẾT QUẢ CHO TỪNG NGƯỜI ---
+
+        function buildMatrixDetails(dateStrings, dataList) {
+            let html = '';
+            dateStrings.forEach((dateStr, idx) => {
+                const num = dataList[idx].originalNumbers;
+                const quant = dataList[idx].quantitative;
+                const arr = [
+                    { n: "KIM", v: quant["KIM"], c: "#FFC107" }, { n: "MỘC", v: quant["MỘC"], c: "#00E676" },
+                    { n: "THỦY", v: quant["THỦY"], c: "#00BFFF" }, { n: "HỎA", v: quant["HỎA"], c: "#FF1744" },
+                    { n: "THỔ", v: quant["THỔ"], c: "#FF9100" }
+                ].sort((a, b) => a.v - b.v);
+
+                let eTable = `<table class="inner-table element-table"><tr>`;
+                for (let i = arr.length - 1; i >= 0; i--) {
+                    eTable += `<td><span style="color:${arr[i].c};font-size:1.2rem;display:block;">${arr[i].v}</span>
+                               <span style="color:${arr[i].c};font-weight:bold;">${arr[i].n}</span></td>`;
+                }
+                eTable += `</tr></table>`;
+
+                html += `
+                <div class="accordion">
+                    <div class="accordion-header" onclick="toggleAccordionContent(this)">
+                         HUYỀN CƠ THÁNG: ${dateStr} <span>▼</span>
+                    </div>
+                    <div class="accordion-content">
+                        <table class="inner-table matrix-table">
+                            <tr><td>${num[3]}</td><td>${num[6]}</td><td>${num[9]}</td></tr>
+                            <tr><td>${num[2]}</td><td>${num[5]}</td><td>${num[8]}</td></tr>
+                            <tr><td>${num[1]}</td><td>${num[4]}</td><td>${num[7]}</td></tr>
+                        </table>
+                        ${eTable}
+                    </div>
+                </div>`;
+            });
+            return html;
+        }
+
+        // --- HÀM TẠO GIAO DIỆN KẾT QUẢ VÀ PHÂN MÀU THEO NĂM ---
+        function buildSummaryTablesHTML(headers, dataList, colLabel) {
+            const els = ["KIM", "MỘC", "THỦY", "HỎA", "THỔ"];
+
+            const generateTable = (isQuantitative) => {
+                let title = isQuantitative ? "Định lượng" : "Định tính";
+                let html = `<div class="table-responsive"><table class="summary-table"><thead><tr><th>${title}</th>`;
+
+                // Render Header
+                headers.forEach((h, index) => {
+                    let borderClass = (index > 0 && headers[index - 1].year !== h.year) ? 'year-divider' : '';
+                    html += `<th class="${borderClass}">${colLabel ? colLabel + ' ' : ''}${h.text}</th>`;
+                });
+                html += `</tr></thead><tbody>`;
+
+                // Render Body
+                els.forEach(el => {
+                    html += `<tr><td><strong>${el}</strong></td>`;
+                    dataList.forEach((d, index) => {
+                        const h = headers[index];
+                        // Xác định màu dựa trên năm chẵn/lẻ
+                        const yearColorClass = h.year % 2 === 0 ? 'year-group-even' : 'year-group-odd';
+                        // Thêm đường kẻ nếu là tháng/năm đầu tiên của một năm mới
+                        const borderClass = (index > 0 && headers[index - 1].year !== h.year) ? 'year-divider' : '';
+
+                        const value = isQuantitative ? d.quantitative[el] : (d.qualitative[el] || "-");
+                        html += `<td class="${yearColorClass} ${borderClass}">${value}</td>`;
+                    });
+                    html += `</tr>`;
+                });
+
+                html += `</tbody></table></div>`;
+                return html;
+            };
+
+            return generateTable(true) + generateTable(false);
+        }
+        // --- CẬP NHẬT LẠI HÀM VẼ BIỂU ĐỒ (Do cấu trúc headers thay đổi) ---
+        function drawChart(canvasId, headers, dataList, colLabel) {
+            const ctx = document.getElementById(canvasId).getContext('2d');
+            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
+
+            const dSets = [
+                { label: 'KIM', data: dataList.map(d => d.quantitative['KIM']), borderColor: '#FFC107', borderWidth: 2, tension: 0 },
+                { label: 'MỘC', data: dataList.map(d => d.quantitative['MỘC']), borderColor: '#00E676', borderWidth: 2, tension: 0 },
+                { label: 'THỦY', data: dataList.map(d => d.quantitative['THỦY']), borderColor: '#00BFFF', borderWidth: 2, tension: 0 },
+                { label: 'HỎA', data: dataList.map(d => d.quantitative['HỎA']), borderColor: '#FF1744', borderWidth: 2, tension: 0 },
+                { label: 'THỔ', data: dataList.map(d => d.quantitative['THỔ']), borderColor: '#FF9100', borderWidth: 2, tension: 0 }
+            ];
+
+            chartInstances[canvasId] = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    // Lấy giá trị h.text từ object headers mới
+                    labels: headers.map(h => `${colLabel ? colLabel + ' ' : ''}${h.text}`),
+                    datasets: dSets
+                },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
+        }
+
+        // --- HÀM GỌI KẾT QUẢ CHÍNH ---
+        function generateMulti(tabType) {
+            const blocks = document.querySelectorAll(`#peopleContainer${tabType} .person-block`);
+            if (blocks.length === 0) return alert("Vui lòng thêm ít nhất 1 người!");
+
+            let timeData = {};
+            if (tabType === 'Month') {
+                timeData.sMonth = parseInt(document.getElementById('numStartMonth').value) || 1;
+                timeData.eMonth = parseInt(document.getElementById('numEndMonth').value) || 12;
+                timeData.tYear = parseInt(document.getElementById('numTargetYear').value);
+                if (!timeData.tYear) return alert("Vui lòng nhập năm muốn xét!");
+            } else {
+                timeData.sYear = parseInt(document.getElementById('numStartYear').value);
+                timeData.eYear = parseInt(document.getElementById('numEndYear').value);
+                if (!timeData.sYear || !timeData.eYear || timeData.sYear > timeData.eYear) return alert("Năm không hợp lệ!");
+            }
+
+            let globalHtml = `
+                <div class="auth-section" id="authWrap${tabType}" style="display: ${isChartUnlocked ? 'none' : 'block'}; margin-bottom: 2rem;">
+                    <p style="font-weight:bold; color:var(--primary); margin-bottom:10px;">🔒 Mở khóa một lần để xem toàn bộ biểu đồ của tất cả mọi người</p>
+                    <input type="password" id="chartPwd${tabType}" class="num-input" placeholder="Nhập mật khẩu để mở khóa" style="width:200px; display:inline-block;">
+                    <button class="num-btn-primary" style="width:auto; padding:0.75rem 1.5rem;" onclick="checkGlobalPassword('${tabType}')">Mở khóa</button>
+                </div>
+            `;
+
+            let chartTasks = [];
+
+            blocks.forEach((block, index) => {
+                const pId = index + 1;
+                const d = parseInt(block.querySelector('.p-day').value);
+                const m = parseInt(block.querySelector('.p-month').value);
+                const y = parseInt(block.querySelector('.p-year').value);
+                const name = block.querySelector('.p-name').value || `Người ${pId}`;
+
+                if (!d || !m || !y) {
+                    alert(`Vui lòng nhập đủ Ngày/Tháng/Năm sinh cho ${name}!`);
+                    return;
+                }
+
+                let datesResult = [], headers = [], dataList = [];
+                let label = tabType === 'Month' ? (extraYearsMonth > 0 ? "" : "Tháng") : "";
+
+                if (tabType === 'Month') {
+                    for (let year = timeData.tYear; year <= timeData.tYear + extraYearsMonth; year++) {
+                        let startM = (year === timeData.tYear) ? timeData.sMonth : 1;
+                        let endM = (year === timeData.tYear + extraYearsMonth) ? timeData.eMonth : 12;
+                        for (let month = startM; month <= endM; month++) {
+                            datesResult.push(`${d}/${month}/${year}`);
+                            // Đẩy object chứa cả text hiển thị và năm vào headers
+                            headers.push({
+                                text: extraYearsMonth > 0 ? `${month}/${year}` : month,
+                                year: year
+                            });
+                            dataList.push(calculateElementsForDate(d, month, year));
+                        }
+                    }
+                } else {
+                    for (let year = timeData.sYear; year <= timeData.eYear; year++) {
+                        datesResult.push(`${d}/${m}/${year}`);
+                        // Đẩy object chứa cả text hiển thị và năm vào headers
+                        headers.push({
+                            text: year,
+                            year: year
+                        });
+                        dataList.push(calculateElementsForDate(d, m, year));
+                    }
+                }
+
+                const canvasId = `chart_${tabType}_${pId}`;
+                chartTasks.push({ id: canvasId, headers, dataList, label });
+
+                globalHtml += `
+                <div class="person-result-box">
+                    <h2 class="person-result-title">👤 ${name} (${d}/${m}/${y})</h2>
+                    ${buildSummaryTablesHTML(headers, dataList, label)}
+                    
+                    <div class="chart-wrapper" style="display: ${isChartUnlocked ? 'block' : 'none'};">
+                        <div class="chart-container-inner"><canvas id="${canvasId}"></canvas></div>
+                    </div>
+                    
+                    <div style="margin-top: 1rem;">
+                        ${buildMatrixDetails(datesResult, dataList)}
+                    </div>
+                </div>`;
+            });
+
+            document.getElementById(`resultGlobal${tabType}`).innerHTML = globalHtml;
+
+            // Vẽ biểu đồ
+            chartTasks.forEach(task => {
+                drawChart(task.id, task.headers, task.dataList, task.label);
+            });
+        }
+        // --- HÀM GỌI KẾT QUẢ CHÍNH (XỬ LÝ ĐA NGƯỜI DÙNG) ---
+
     </script>
 </body>
 
