@@ -4,582 +4,126 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thần Số Học Tỉnh Thức - Multi User</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <title>Thần Số Học - Huyền Cơ So Sánh</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
     <style>
-        /* Biến CSS toàn cục */
-        /* CSS cho phân nhóm bảng theo năm */
-        .year-group-even {
-            background-color: #ffffff !important;
+        @keyframes fade-in-up {
+            from {
+                opacity: 0;
+                transform: translateY(1.5rem);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
-        .year-group-odd {
-            background-color: #f0f6fb !important;
+        .animate-fade-in-up {
+            animation: fade-in-up 0.5s cubic-bezier(0.16, 1, 0.3, 1) forwards;
         }
 
-        /* Đường kẻ dọc ngăn cách giữa các năm */
-        .year-divider {
-            border-left: 3px solid #bdc3c7 !important;
-        }
-
-        /* Đảm bảo hiệu ứng hover vẫn hoạt động trên các ô có màu nền */
-        .summary-table tbody tr:hover td.year-group-even,
-        .summary-table tbody tr:hover td.year-group-odd {
-            background-color: #e2e8f0 !important;
-            cursor: pointer;
-        }
-
-        :root {
-            --primary: #2c3e50;
-            --secondary: #3498db;
-            --accent: #e74c3c;
-            --bg: #ecf0f1;
-            --text: #2c3e50;
-            --shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-            --transition: all 0.3s ease;
-        }
-
-        /* CSS cho phân nhóm bảng theo năm */
-        .year-group-1 {
-            background-color: #ffffff;
-        }
-
-        /* Nền trắng cho năm chẵn */
-        .year-group-2 {
-            background-color: #f0f6fb;
-        }
-
-        /* Nền xanh nhạt cho năm lẻ */
-
-        /* Đảm bảo hiệu ứng hover không bị mất khi có nền màu */
-        .summary-table tbody tr:hover td.year-group-1,
-        .summary-table tbody tr:hover td.year-group-2 {
-            background-color: #e2e8f0;
-            cursor: pointer;
-        }
-
-        * {
+        /* Ẩn mũi tên của input type number */
+        input[type=number]::-webkit-inner-spin-button,
+        input[type=number]::-webkit-outer-spin-button {
+            -webkit-appearance: none;
             margin: 0;
-            padding: 0;
-            box-sizing: border-box;
         }
 
-        body {
-            font-family: 'Segoe UI', Roboto, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            line-height: 1.6;
-            padding: 0 10px;
+        input[type=number] {
+            -moz-appearance: textfield;
         }
 
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
+        /* Tùy chỉnh thanh cuộn (Scrollbar) cho giao diện sạch hơn */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
         }
 
-        /* Tab Navigation */
-        .tab-container {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 2rem;
+        ::-webkit-scrollbar-track {
+            background: #f1f5f9;
+            border-radius: 4px;
         }
 
-        .tab-button {
-            padding: 1rem 2rem;
-            font-size: 1.1rem;
-            font-weight: bold;
-            border: none;
-            border-radius: 10px;
-            background-color: white;
-            color: var(--primary);
-            cursor: pointer;
-            transition: var(--transition);
-            box-shadow: var(--shadow);
-            flex: 1;
-            text-align: center;
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1;
+            border-radius: 4px;
         }
 
-        .tab-button:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8;
         }
 
-        .tab-button.active {
-            background-color: var(--secondary);
-            color: white;
-        }
-
-        .tab-content {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 15px;
-            box-shadow: var(--shadow);
-            display: none;
-        }
-
-        .tab-content.active {
-            display: block;
-            animation: fadeIn 0.5s ease;
-        }
-
-        /* Form Layout */
-        .section-title {
-            margin: 1.5rem 0 1rem;
-            color: var(--primary);
-            border-bottom: 2px solid var(--secondary);
-            padding-bottom: 0.5rem;
-            display: inline-block;
-        }
-
-        .num-form-container {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .num-input-group {
-            background: white;
-            padding: 1rem;
-            border-radius: 12px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-            transition: var(--transition);
-        }
-
-        .num-input-group:hover {
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            transform: translateY(-2px);
-        }
-
-        .num-input-group label {
-            display: block;
-            font-weight: 600;
-            color: var(--primary);
-            margin-bottom: 0.75rem;
-        }
-
-        .num-input {
-            width: 100%;
-            padding: 0.75rem;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 1rem;
-            transition: var(--transition);
-            background-color: #f8f9fa;
-        }
-
-        .num-input:focus {
-            border-color: var(--secondary);
-            background-color: white;
-            outline: none;
-        }
-
-        /* Person Block Styling */
-        .person-block {
-            background: #fdfdfd;
-            border: 1px solid #e0e0e0;
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            position: relative;
-        }
-
-        .person-block-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 1rem;
-        }
-
-        .person-block-title {
-            font-weight: bold;
-            color: var(--secondary);
-            font-size: 1.1rem;
-        }
-
-        .remove-btn {
-            background: var(--accent);
-            color: white;
-            border: none;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 0.9rem;
-        }
-
-        .remove-btn:hover {
-            background: #c0392b;
-        }
-
-        /* Buttons */
-        .action-btn {
-            width: 40px;
-            background-color: var(--secondary);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.2rem;
-            font-weight: bold;
-            cursor: pointer;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .btn-add-person {
-            background: #27ae60;
-            color: white;
-            border: none;
-            padding: 0.8rem 1.5rem;
-            border-radius: 8px;
-            cursor: pointer;
-            font-weight: bold;
-            margin-bottom: 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            transition: var(--transition);
-        }
-
-        .btn-add-person:hover {
-            background: #219a52;
-            transform: translateY(-2px);
-        }
-
-        .num-btn-primary {
-            width: 100%;
-            padding: 1rem;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: bold;
-            background: linear-gradient(135deg, var(--secondary), #2980b9);
-            color: white;
-            cursor: pointer;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            margin-bottom: 1rem;
-        }
-
-        /* Result Area */
-        .person-result-box {
-            border: 2px solid var(--secondary);
-            border-radius: 12px;
-            padding: 1.5rem;
-            margin-top: 2rem;
-            background: #fff;
-        }
-
-        .person-result-title {
-            background: var(--secondary);
-            color: white;
-            display: inline-block;
-            padding: 0.5rem 1.5rem;
-            border-radius: 20px;
-            margin-top: -2.5rem;
-            margin-bottom: 1rem;
-        }
-
-        /* Tables & Charts */
-        .table-responsive {
-            width: 100%;
-            overflow-x: auto;
-            margin-bottom: 1.5rem;
-            border-radius: 8px;
-            box-shadow: var(--shadow);
-        }
-
-        .summary-table {
-            width: 100%;
-            min-width: 600px;
-            border-collapse: collapse;
-            background-color: white;
-        }
-
-        .summary-table th,
-        .summary-table td {
-            border: 1px solid #e0e0e0;
-            padding: 10px;
-            text-align: center;
-            white-space: nowrap;
-        }
-
-        .summary-table th {
-            background-color: var(--primary);
-            color: white;
-        }
-
-        .summary-table th:first-child,
-        .summary-table td:first-child {
-            position: sticky;
-            left: 0;
-            background-color: #f8f9fa;
-            font-weight: bold;
-            z-index: 1;
-        }
-
-        .chart-wrapper {
-            width: 100%;
-            overflow-x: auto;
-            margin-top: 1rem;
-        }
-
-        .chart-container-inner {
-            position: relative;
-            height: 350px;
-            width: 100%;
-            min-width: 500px;
-        }
-
-        .auth-section {
-            text-align: center;
-            padding: 2rem 1rem;
-            background-color: #f8f9fa;
-            border-radius: 8px;
-            border: 1px dashed #ccc;
-            margin-top: 1rem;
-        }
-
-        /* Accordion */
-        .accordion {
-            margin-top: 1rem;
-            border-radius: 8px;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-
-        .accordion-header {
-            background-color: #ecf0f1;
-            color: var(--primary);
-            padding: 1rem;
-            cursor: pointer;
-            display: flex;
-            justify-content: space-between;
-            font-weight: 600;
-        }
-
-        .accordion-header:hover {
-            background-color: #dfe6e9;
-        }
-
-        .accordion-content {
-            padding: 1.5rem;
-            display: none;
-            background: white;
-        }
-
-        /* Matrix Tables */
-        .inner-table {
-            width: 250px;
-            border-collapse: collapse;
-            margin: 1rem auto;
-            background-color: white;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            border-radius: 8px;
-            overflow: hidden;
-        }
-
-        .inner-table td {
-            text-align: center;
-            border: 1px solid #e0e0e0;
-            padding: 0.75rem;
-            transition: 0.2s;
-        }
-
-        .matrix-table td {
-            width: 80px;
-            height: 80px;
-            font-weight: bold;
-            font-size: 1.2rem;
-        }
-
-        .element-table {
-            width: auto;
-            min-width: 250px;
-        }
-
-        @media (max-width: 768px) {
-            .tab-container {
-                flex-direction: column;
-            }
-
-            .num-form-container {
-                grid-template-columns: 1fr;
-            }
+        /* Hiệu ứng focus cho input custom */
+        .input-ring-custom:focus-within {
+            box-shadow: 0 0 0 2px #0ea5e9, 0 0 0 4px rgba(14, 165, 233, 0.2);
         }
     </style>
 </head>
 
-<body>
-    <div class="container">
-        <div class="tab-container">
-            <button class="tab-button active" onclick="showTab('generator')">XEM MATRIX THÁNG</button>
-            <button class="tab-button" onclick="showTab('generators')">XEM MATRIX NĂM</button>
-        </div>
+<body class="min-h-screen bg-slate-100 font-sans text-slate-800 selection:bg-sky-200 overflow-x-hidden">
 
-        <div id="generator" class="tab-content active">
-            <h3 class="section-title">⏳ Thông tin thời gian</h3>
-            <div class="num-form-container">
-                <div class="num-input-group">
-                    <label>📅 THÁNG bắt đầu:</label>
-                    <input type="number" id="numStartMonth" class="num-input" value="" min="1" max="12" />
-                </div>
-                <div class="num-input-group" style="display: none;">
-                    <label>📅 THÁNG kết thúc:</label>
-                    <input type="number" id="numEndMonth" class="num-input" value="12" min="1" max="12" />
-                </div>
-                <div class="num-input-group">
-                    <label>📅 Năm muốn xét: <span id="extraYearTextMonth"
-                            style="color: var(--accent); font-size: 0.9em;"></span></label>
-                    <div style="display: flex; gap: 0.5rem;">
-                        <input type="number" id="numTargetYear" class="num-input" value="" />
-                        <button type="button" onclick="changeExtraYear('Month', 1)" class="action-btn"
-                            title="Thêm 1 năm">+</button>
-                        <button type="button" onclick="changeExtraYear('Month', -1)" class="action-btn"
-                            style="background-color: #95a5a6;" title="Giảm 1 năm">-</button>
-                    </div>
-                </div>
+    <div id="app" class="p-3 sm:p-4 md:p-8 w-full max-w-[100vw]">
+        <div class="max-w-7xl mx-auto">
+
+            <!-- TAB NAVIGATION -->
+            <div id="tabs-container" class="flex flex-col sm:flex-row gap-3 md:gap-4 mb-6 md:mb-8"></div>
+
+            <!-- INPUT AREA -->
+            <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-8 animate-fade-in-up">
+
+                <h3
+                    class="text-lg sm:text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-2">
+                    <i data-lucide="hourglass" class="w-5 h-5 text-sky-600"></i> Thông tin thời gian
+                </h3>
+
+                <div id="time-form-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8"></div>
+
+                <h3
+                    class="text-lg sm:text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-2">
+                    <i data-lucide="user-plus" class="w-5 h-5 text-sky-600"></i> Danh sách người xem
+                </h3>
+
+                <div id="people-list-container" class="space-y-4 mb-6"></div>
+
+                <button id="btn-add-person"
+                    class="mb-8 w-full sm:w-auto px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-sm shadow-emerald-200 transition-all active:scale-95 flex items-center justify-center sm:justify-start gap-2">
+                    <i data-lucide="user-plus" class="w-5 h-5"></i> Thêm người tra cứu
+                </button>
+
+                <button id="btn-generate"
+                    class="w-full py-4 bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg rounded-xl shadow-md shadow-blue-200 transition-all active:scale-[0.98] flex justify-center items-center gap-2 uppercase tracking-wide">
+                    <i data-lucide="sparkles" class="w-6 h-6"></i> KẾT QUẢ SO SÁNH
+                </button>
             </div>
 
-            <h3 class="section-title">👥 Danh sách người xem</h3>
-            <div id="peopleContainerMonth">
-            </div>
+            <!-- RESULTS AREA -->
+            <div id="results-container"></div>
 
-            <button class="btn-add-person" onclick="addPerson('Month')">
-                👤 Thêm người tra cứu
-            </button>
-
-            <button class="num-btn-primary" onclick="generateMulti('Month')">KẾT QUẢ SO SÁNH</button>
-            <div id="resultGlobalMonth"></div>
-        </div>
-
-        <div id="generators" class="tab-content">
-            <h3 class="section-title">⏳ Thông tin thời gian</h3>
-            <div class="num-form-container">
-                <div class="num-input-group">
-                    <label>📅 NĂM bắt đầu:</label>
-                    <input type="number" id="numStartYear" class="num-input" value="" />
-                </div>
-                <div class="num-input-group">
-                    <label>📅 NĂM kết thúc:</label>
-                    <input type="number" id="numEndYear" class="num-input" value="" />
-                </div>
-            </div>
-
-            <h3 class="section-title">👥 Danh sách người xem</h3>
-            <div id="peopleContainerYear">
-            </div>
-
-            <button class="btn-add-person" onclick="addPerson('Year')">
-                👤 Thêm người tra cứu
-            </button>
-
-            <button class="num-btn-primary" onclick="generateMulti('Year')">KẾT QUẢ SO SÁNH</button>
-            <div id="resultGlobalYear"></div>
         </div>
     </div>
 
     <script>
-        // --- QUẢN LÝ TAB & UI CHUNG ---
-        function showTab(tabId) {
-            document.querySelectorAll('.tab-content, .tab-button').forEach(el => el.classList.remove('active'));
-            document.getElementById(tabId).classList.add('active');
-            document.querySelector(`button[onclick="showTab('${tabId}')"]`).classList.add('active');
-        }
-
-        function toggleAccordionContent(element) {
-            const content = element.nextElementSibling;
-            content.style.display = content.style.display === 'block' ? 'none' : 'block';
-        }
-
-        // --- QUẢN LÝ THÊM/XÓA NGƯỜI ---
-        let personCounters = { Month: 0, Year: 0 };
-
-        function addPerson(tabType) {
-            personCounters[tabType]++;
-            const pId = personCounters[tabType];
-            const container = document.getElementById(`peopleContainer${tabType}`);
-
-            const block = document.createElement('div');
-            block.className = 'person-block';
-            block.id = `personBlock_${tabType}_${pId}`;
-
-            block.innerHTML = `
-                <div class="person-block-header">
-                    <div class="person-block-title">Người thứ ${pId}</div>
-                    ${pId > 1 ? `<button class="remove-btn" onclick="removePerson('${tabType}', ${pId})">🗑️ Xóa</button>` : ''}
-                </div>
-                <div class="num-form-container" style="margin-bottom: 0;">
-                    <div class="num-input-group">
-                        <label>Ngày sinh:</label>
-                        <input type="number" class="num-input p-day" placeholder="DD" min="1" max="31" required />
-                    </div>
-                    <div class="num-input-group">
-                        <label>Tháng sinh:</label>
-                        <input type="number" class="num-input p-month" placeholder="MM" min="1" max="12" required />
-                    </div>
-                    <div class="num-input-group">
-                        <label>Năm sinh:</label>
-                        <input type="number" class="num-input p-year" placeholder="YYYY" required />
-                    </div>
-                    <div class="num-input-group">
-                        <label>Tên hiển thị (Tùy chọn):</label>
-                        <input type="text" class="num-input p-name" placeholder="VD: Nam, Tuấn..." />
-                    </div>
-                </div>
-            `;
-            container.appendChild(block);
-        }
-
-        function removePerson(tabType, id) {
-            const block = document.getElementById(`personBlock_${tabType}_${id}`);
-            if (block) block.remove();
-        }
-
-        // --- QUẢN LÝ NĂM TĂNG CƯỜNG (+/-) CHO TAB THÁNG ---
-        let extraYearsMonth = 0;
-        function changeExtraYear(tabType, amount) {
-            if (tabType === 'Month') {
-                extraYearsMonth += amount;
-                if (extraYearsMonth < 0) extraYearsMonth = 0;
-                const baseYear = document.getElementById('numTargetYear').value;
-                const textEl = document.getElementById('extraYearTextMonth');
-                textEl.innerText = extraYearsMonth > 0 ? `(Tới năm ${parseInt(baseYear) + extraYearsMonth})` : "";
-            }
-        }
-
-        // Khởi tạo người đầu tiên khi load web
-        window.onload = () => {
-            addPerson('Month');
-            addPerson('Year');
-        };
-
-        // --- BẢO MẬT & CHART.JS ---
-        let isChartUnlocked = false;
-        let chartInstances = {}; // Lưu trữ biểu đồ: { 'Month_1': chartObj, ... }
-
-        function checkGlobalPassword(tabType) {
-            const pwd = document.getElementById(`chartPwd${tabType}`).value;
-            if (pwd === '3131') {
-                isChartUnlocked = true;
-                // Mở khóa toàn bộ
-                document.querySelectorAll('.auth-section').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.chart-wrapper').forEach(el => el.style.display = 'block');
-                // Resize lại chart
-                Object.values(chartInstances).forEach(chart => chart.resize());
-            } else {
-                alert('Mật khẩu không chính xác!');
-            }
-        }
-
-        // --- QUY TẮC TÍNH TOÁN ---
+        // --- HẰNG SỐ & QUY TẮC THẦN SỐ HỌC ---
         const NGU_HANH_RULES = {
-            "KIM": [1, 2, 3, 5, 6, 9], "MỘC": [1, 4, 5, 7, 8, 9],
-            "THỦY": [1, 2, 3, 4, 5, 7], "HỎA": [3, 5, 6, 7, 8, 9], "THỔ": [4, 5, 6]
+            "KIM": [1, 2, 3, 5, 6, 9],
+            "MỘC": [1, 4, 5, 7, 8, 9],
+            "THỦY": [1, 2, 3, 4, 5, 7],
+            "HỎA": [3, 5, 6, 7, 8, 9],
+            "THỔ": [4, 5, 6]
         };
 
-        function calculateNumbers(d, m, y) {
+        const NGU_HANH_COLORS = {
+            "KIM": "#eab308", // Yellow 500
+            "MỘC": "#22c55e", // Green 500
+            "THỦY": "#0ea5e9", // Sky 500
+            "HỎA": "#ef4444", // Red 500
+            "THỔ": "#f97316"  // Orange 500
+        };
+
+        // --- CÁC HÀM TÍNH TOÁN LOGIC ---
+        const calculateNumbers = (d, m, y) => {
             const dateStr = y.toString() + m.toString().padStart(2, '0') + d.toString().padStart(2, '0');
             const dateDigits = Array.from(dateStr).map(Number);
             const digitCount = Array(10).fill(0);
@@ -587,19 +131,22 @@
             dateDigits.forEach(num => digitCount[num]++);
             const sum = dateDigits.reduce((a, b) => a + b, 0);
             Array.from(sum.toString()).map(Number).forEach(num => digitCount[num]++);
+
             const secondNum = Array.from(sum.toString()).reduce((a, b) => a + Number(b), 0);
             Array.from(secondNum.toString()).map(Number).forEach(num => digitCount[num]++);
+
             const thirdNum = sum - (2 * (d < 10 ? d : Math.floor(d / 10)));
             Array.from(thirdNum.toString()).map(Number).forEach(num => digitCount[num]++);
+
             const fourthNum = Array.from(thirdNum.toString()).reduce((a, b) => a + Number(b), 0);
             Array.from(fourthNum.toString()).map(Number).forEach(num => digitCount[num]++);
 
             let res = {};
             for (let i = 1; i <= 9; i++) res[i] = digitCount[i] ? i.toString().repeat(digitCount[i]) : '';
             return res;
-        }
+        };
 
-        function calculateElementsForDate(d, m, y) {
+        const calculateElementsForDate = (d, m, y) => {
             const numbers = calculateNumbers(d, m, y);
             let quant = {}, qual = {};
             for (const [el, cells] of Object.entries(NGU_HANH_RULES)) {
@@ -607,201 +154,616 @@
                 qual[el] = cells.map(c => numbers[c]).filter(v => v !== "").join(" ");
             }
             return { quantitative: quant, qualitative: qual, originalNumbers: numbers };
-        }
+        };
 
-        // --- HÀM TẠO GIAO DIỆN KẾT QUẢ CHO TỪNG NGƯỜI ---
+        // --- STATE QUẢN LÝ ---
+        let state = {
+            activeTab: 'Month',
 
-        function buildMatrixDetails(dateStrings, dataList) {
-            let html = '';
-            dateStrings.forEach((dateStr, idx) => {
-                const num = dataList[idx].originalNumbers;
-                const quant = dataList[idx].quantitative;
-                const arr = [
-                    { n: "KIM", v: quant["KIM"], c: "#FFC107" }, { n: "MỘC", v: quant["MỘC"], c: "#00E676" },
-                    { n: "THỦY", v: quant["THỦY"], c: "#00BFFF" }, { n: "HỎA", v: quant["HỎA"], c: "#FF1744" },
-                    { n: "THỔ", v: quant["THỔ"], c: "#FF9100" }
-                ].sort((a, b) => a.v - b.v);
+            monthStart: '', monthEnd: '12', monthTargetYear: '', extraYearsMonth: 0,
+            yearStart: '', yearEnd: '',
 
-                let eTable = `<table class="inner-table element-table"><tr>`;
-                for (let i = arr.length - 1; i >= 0; i--) {
-                    eTable += `<td><span style="color:${arr[i].c};font-size:1.2rem;display:block;">${arr[i].v}</span>
-                               <span style="color:${arr[i].c};font-weight:bold;">${arr[i].n}</span></td>`;
+            peopleMonth: [{ id: Date.now(), d: '', m: '', y: '', name: '' }],
+            peopleYear: [{ id: Date.now() + 1, d: '', m: '', y: '', name: '' }],
+
+            results: null,
+            isChartUnlocked: false,
+            passwordInput: ''
+        };
+
+        // --- LOCAL STORAGE ---
+        function loadFromCache() {
+            try {
+                const tm = JSON.parse(localStorage.getItem('tshtt_time_Month'));
+                if (tm) {
+                    state.monthStart = tm.sMonth || '';
+                    state.monthTargetYear = tm.tYear || '';
                 }
-                eTable += `</tr></table>`;
+                const ty = JSON.parse(localStorage.getItem('tshtt_time_Year'));
+                if (ty) {
+                    state.yearStart = ty.sYear || '';
+                    state.yearEnd = ty.eYear || '';
+                }
+                const pm = JSON.parse(localStorage.getItem('tshtt_people_Month'));
+                if (pm && pm.length) state.peopleMonth = pm;
 
-                html += `
-                <div class="accordion">
-                    <div class="accordion-header" onclick="toggleAccordionContent(this)">
-                         HUYỀN CƠ THÁNG: ${dateStr} <span>▼</span>
-                    </div>
-                    <div class="accordion-content">
-                        <table class="inner-table matrix-table">
-                            <tr><td>${num[3]}</td><td>${num[6]}</td><td>${num[9]}</td></tr>
-                            <tr><td>${num[2]}</td><td>${num[5]}</td><td>${num[8]}</td></tr>
-                            <tr><td>${num[1]}</td><td>${num[4]}</td><td>${num[7]}</td></tr>
-                        </table>
-                        ${eTable}
-                    </div>
-                </div>`;
-            });
-            return html;
+                const py = JSON.parse(localStorage.getItem('tshtt_people_Year'));
+                if (py && py.length) state.peopleYear = py;
+            } catch (e) { console.warn("Lỗi đọc cache", e); }
         }
 
-        // --- HÀM TẠO GIAO DIỆN KẾT QUẢ VÀ PHÂN MÀU THEO NĂM ---
-        function buildSummaryTablesHTML(headers, dataList, colLabel) {
-            const els = ["KIM", "MỘC", "THỦY", "HỎA", "THỔ"];
-
-            const generateTable = (isQuantitative) => {
-                let title = isQuantitative ? "Định lượng" : "Định tính";
-                let html = `<div class="table-responsive"><table class="summary-table"><thead><tr><th>${title}</th>`;
-
-                // Render Header
-                headers.forEach((h, index) => {
-                    let borderClass = (index > 0 && headers[index - 1].year !== h.year) ? 'year-divider' : '';
-                    html += `<th class="${borderClass}">${colLabel ? colLabel + ' ' : ''}${h.text}</th>`;
-                });
-                html += `</tr></thead><tbody>`;
-
-                // Render Body
-                els.forEach(el => {
-                    html += `<tr><td><strong>${el}</strong></td>`;
-                    dataList.forEach((d, index) => {
-                        const h = headers[index];
-                        // Xác định màu dựa trên năm chẵn/lẻ
-                        const yearColorClass = h.year % 2 === 0 ? 'year-group-even' : 'year-group-odd';
-                        // Thêm đường kẻ nếu là tháng/năm đầu tiên của một năm mới
-                        const borderClass = (index > 0 && headers[index - 1].year !== h.year) ? 'year-divider' : '';
-
-                        const value = isQuantitative ? d.quantitative[el] : (d.qualitative[el] || "-");
-                        html += `<td class="${yearColorClass} ${borderClass}">${value}</td>`;
-                    });
-                    html += `</tr>`;
-                });
-
-                html += `</tbody></table></div>`;
-                return html;
-            };
-
-            return generateTable(true) + generateTable(false);
-        }
-        // --- CẬP NHẬT LẠI HÀM VẼ BIỂU ĐỒ (Do cấu trúc headers thay đổi) ---
-        function drawChart(canvasId, headers, dataList, colLabel) {
-            const ctx = document.getElementById(canvasId).getContext('2d');
-            if (chartInstances[canvasId]) chartInstances[canvasId].destroy();
-
-            const dSets = [
-                { label: 'KIM', data: dataList.map(d => d.quantitative['KIM']), borderColor: '#FFC107', borderWidth: 2, tension: 0 },
-                { label: 'MỘC', data: dataList.map(d => d.quantitative['MỘC']), borderColor: '#00E676', borderWidth: 2, tension: 0 },
-                { label: 'THỦY', data: dataList.map(d => d.quantitative['THỦY']), borderColor: '#00BFFF', borderWidth: 2, tension: 0 },
-                { label: 'HỎA', data: dataList.map(d => d.quantitative['HỎA']), borderColor: '#FF1744', borderWidth: 2, tension: 0 },
-                { label: 'THỔ', data: dataList.map(d => d.quantitative['THỔ']), borderColor: '#FF9100', borderWidth: 2, tension: 0 }
-            ];
-
-            chartInstances[canvasId] = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    // Lấy giá trị h.text từ object headers mới
-                    labels: headers.map(h => `${colLabel ? colLabel + ' ' : ''}${h.text}`),
-                    datasets: dSets
-                },
-                options: { responsive: true, maintainAspectRatio: false }
-            });
-        }
-
-        // --- HÀM GỌI KẾT QUẢ CHÍNH ---
-        function generateMulti(tabType) {
-            const blocks = document.querySelectorAll(`#peopleContainer${tabType} .person-block`);
-            if (blocks.length === 0) return alert("Vui lòng thêm ít nhất 1 người!");
-
-            let timeData = {};
-            if (tabType === 'Month') {
-                timeData.sMonth = parseInt(document.getElementById('numStartMonth').value) || 1;
-                timeData.eMonth = parseInt(document.getElementById('numEndMonth').value) || 12;
-                timeData.tYear = parseInt(document.getElementById('numTargetYear').value);
-                if (!timeData.tYear) return alert("Vui lòng nhập năm muốn xét!");
+        function saveTimeToCache() {
+            if (state.activeTab === 'Month') {
+                localStorage.setItem('tshtt_time_Month', JSON.stringify({ sMonth: state.monthStart, tYear: state.monthTargetYear }));
             } else {
-                timeData.sYear = parseInt(document.getElementById('numStartYear').value);
-                timeData.eYear = parseInt(document.getElementById('numEndYear').value);
-                if (!timeData.sYear || !timeData.eYear || timeData.sYear > timeData.eYear) return alert("Năm không hợp lệ!");
+                localStorage.setItem('tshtt_time_Year', JSON.stringify({ sYear: state.yearStart, eYear: state.yearEnd }));
+            }
+        }
+
+        function savePeopleToCache() {
+            if (state.activeTab === 'Month') {
+                localStorage.setItem('tshtt_people_Month', JSON.stringify(state.peopleMonth));
+            } else {
+                localStorage.setItem('tshtt_people_Year', JSON.stringify(state.peopleYear));
+            }
+        }
+
+        // --- RENDER FUNCTIONS ---
+        function renderTabs() {
+            const container = document.getElementById('tabs-container');
+            container.innerHTML = `
+                <button id="tab-month" class="flex-1 py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-sm sm:text-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-sm active:scale-95
+                    ${state.activeTab === 'Month' ? 'bg-sky-600 text-white shadow-sky-200' : 'bg-white text-slate-600 hover:bg-sky-50'}">
+                    <i data-lucide="calendar-days" class="w-5 h-5 sm:w-6 sm:h-6"></i> XEM MATRIX THÁNG
+                </button>
+                <button id="tab-year" class="flex-1 py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-sm sm:text-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-sm active:scale-95
+                    ${state.activeTab === 'Year' ? 'bg-sky-600 text-white shadow-sky-200' : 'bg-white text-slate-600 hover:bg-sky-50'}">
+                    <i data-lucide="calendar" class="w-5 h-5 sm:w-6 sm:h-6"></i> XEM MATRIX NĂM
+                </button>
+            `;
+            lucide.createIcons();
+        }
+
+        function renderTimeForm() {
+            const container = document.getElementById('time-form-container');
+            const inputClasses = "time-input w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-all";
+
+            if (state.activeTab === 'Month') {
+                container.innerHTML = `
+                    <div>
+                        <label class="block text-sm sm:text-base font-semibold text-slate-700 mb-2">Tháng bắt đầu:</label>
+                        <input type="number" min="1" max="12" data-field="monthStart" value="${state.monthStart}" class="${inputClasses}" placeholder="Nhập tháng (1-12)"/>
+                    </div>
+                    <div>
+                        <label class="block text-sm sm:text-base font-semibold text-slate-700 mb-2 flex flex-wrap items-center justify-between gap-1">
+                            <span>Năm muốn xét:</span>
+                            ${state.extraYearsMonth > 0 ? `<span class="text-orange-600 text-xs sm:text-sm font-semibold bg-orange-100 px-2 py-0.5 rounded shadow-sm">(Tới năm ${parseInt(state.monthTargetYear || 0) + state.extraYearsMonth})</span>` : ''}
+                        </label>
+                        <div class="flex gap-2">
+                            <input type="number" data-field="monthTargetYear" value="${state.monthTargetYear}" class="${inputClasses}" placeholder="Nhập năm (VD: 2024)" />
+                            <button id="btn-plus-year" class="bg-sky-600 text-white p-3 rounded-lg hover:bg-sky-700 transition active:scale-90 flex-shrink-0"><i data-lucide="plus" class="w-5 h-5"></i></button>
+                            <button id="btn-minus-year" class="bg-slate-400 text-white p-3 rounded-lg hover:bg-slate-500 transition active:scale-90 flex-shrink-0"><i data-lucide="minus" class="w-5 h-5"></i></button>
+                        </div>
+                    </div>
+                `;
+            } else {
+                container.innerHTML = `
+                    <div>
+                        <label class="block text-sm sm:text-base font-semibold text-slate-700 mb-2">Năm bắt đầu:</label>
+                        <input type="number" data-field="yearStart" value="${state.yearStart}" class="${inputClasses}" placeholder="Nhập năm bắt đầu" />
+                    </div>
+                    <div>
+                        <label class="block text-sm sm:text-base font-semibold text-slate-700 mb-2">Năm kết thúc:</label>
+                        <input type="number" data-field="yearEnd" value="${state.yearEnd}" class="${inputClasses}" placeholder="Nhập năm kết thúc" />
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function renderPeopleList() {
+            const container = document.getElementById('people-list-container');
+            const currentList = state.activeTab === 'Month' ? state.peopleMonth : state.peopleYear;
+            const inputClasses = "person-input w-full p-2.5 sm:p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-500 focus:outline-none transition-all";
+
+            container.innerHTML = currentList.map((p, idx) => `
+                <div class="bg-white p-4 sm:p-5 rounded-xl border border-slate-200 shadow-sm relative mb-4 hover:shadow-md transition-shadow">
+                    <div class="flex justify-between items-center mb-4 border-b border-slate-100 pb-3">
+                        <h4 class="font-bold text-sky-600 flex items-center gap-2 text-sm sm:text-base">
+                            <i data-lucide="user" class="w-5 h-5"></i> Người thứ ${idx + 1}
+                        </h4>
+                        ${idx > 0 ? `
+                        <button data-id="${p.id}" class="btn-remove-person text-red-500 hover:text-white bg-red-50 hover:bg-red-500 px-3 py-1.5 rounded-md text-xs sm:text-sm font-semibold flex items-center gap-1 transition-colors active:scale-95">
+                            <i data-lucide="trash-2" class="w-4 h-4"></i> <span class="hidden sm:inline">Xóa</span>
+                        </button>` : ''}
+                    </div>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div>
+                            <label class="block text-xs sm:text-sm font-semibold text-slate-600 mb-1.5">Ngày sinh</label>
+                            <input type="number" min="1" max="31" placeholder="DD" data-id="${p.id}" data-field="d" value="${p.d}" class="${inputClasses}" />
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-semibold text-slate-600 mb-1.5">Tháng sinh</label>
+                            <input type="number" min="1" max="12" placeholder="MM" data-id="${p.id}" data-field="m" value="${p.m}" class="${inputClasses}" />
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-semibold text-slate-600 mb-1.5">Năm sinh</label>
+                            <input type="number" placeholder="YYYY" data-id="${p.id}" data-field="y" value="${p.y}" class="${inputClasses}" />
+                        </div>
+                        <div>
+                            <label class="block text-xs sm:text-sm font-semibold text-slate-600 mb-1.5">Tên (Tùy chọn)</label>
+                            <input type="text" placeholder="VD: Nam, Tuấn..." data-id="${p.id}" data-field="name" value="${p.name}" class="${inputClasses}" />
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        // SVG Chart Generator Function
+        function generateSVGChart(headers, dataList, colLabel) {
+            const height = 300;
+            const paddingX = 40;
+            const paddingY = 40;
+            const width = Math.max(800, headers.length * 60);
+
+            const datasets = Object.keys(NGU_HANH_COLORS).map(el => ({
+                label: el,
+                color: NGU_HANH_COLORS[el],
+                data: dataList.map(d => d.quantitative[el])
+            }));
+
+            const maxVal = Math.max(...datasets.flatMap(d => d.data), 5) + 1;
+            const getX = (index) => paddingX + (index * ((width - 2 * paddingX) / Math.max(1, headers.length - 1)));
+            const getY = (val) => height - paddingY - ((val / maxVal) * (height - 2 * paddingY));
+
+            let yGrid = '';
+            for (let i = 0; i <= maxVal; i++) {
+                yGrid += `
+                    <g>
+                        <line x1="${paddingX}" y1="${getY(i)}" x2="${width - paddingX}" y2="${getY(i)}" stroke="#e2e8f0" stroke-width="1" />
+                        <text x="${paddingX - 10}" y="${getY(i) + 4}" font-size="12" fill="#64748b" text-anchor="end">${i}</text>
+                    </g>
+                `;
             }
 
-            let globalHtml = `
-                <div class="auth-section" id="authWrap${tabType}" style="display: ${isChartUnlocked ? 'none' : 'block'}; margin-bottom: 2rem;">
-                    <p style="font-weight:bold; color:var(--primary); margin-bottom:10px;">🔒 Mở khóa một lần để xem toàn bộ biểu đồ của tất cả mọi người</p>
-                    <input type="password" id="chartPwd${tabType}" class="num-input" placeholder="Nhập mật khẩu để mở khóa" style="width:200px; display:inline-block;">
-                    <button class="num-btn-primary" style="width:auto; padding:0.75rem 1.5rem;" onclick="checkGlobalPassword('${tabType}')">Mở khóa</button>
+            let xLabels = headers.map((h, i) => `
+                <text x="${getX(i)}" y="${height - paddingY + 20}" font-size="12" fill="#64748b" text-anchor="middle">${colLabel ? colLabel + ' ' : ''}${h.text}</text>
+            `).join('');
+
+            let linesAndPoints = datasets.map((ds) => {
+                const points = ds.data.map((val, idx) => `${getX(idx)},${getY(val)}`).join(' ');
+                let ptsHTML = ds.data.map((val, idx) => `
+                    <circle cx="${getX(idx)}" cy="${getY(val)}" r="4" fill="${ds.color}" stroke="#fff" stroke-width="2" class="hover:r-6 transition-all" />
+                `).join('');
+
+                return `
+                    <g>
+                        <polyline fill="none" stroke="${ds.color}" stroke-width="3" points="${points}" stroke-linejoin="round" class="transition-all duration-300 opacity-90 hover:opacity-100 hover:stroke-4" />
+                        ${ptsHTML}
+                    </g>
+                `;
+            }).join('');
+
+            const legendHTML = datasets.map(ds => `
+                <div class="flex items-center gap-1.5 whitespace-nowrap">
+                    <span class="w-3 h-3 rounded-full flex-shrink-0" style="background-color: ${ds.color}"></span>
+                    <span class="text-xs font-semibold text-slate-700">${ds.label}</span>
+                </div>
+            `).join('');
+
+            return `
+                <div class="w-full overflow-x-auto pb-4 custom-scrollbar">
+                    <div style="width: ${width}px; height: ${height}px; position: relative;">
+                        <svg width="${width}" height="${height}" class="bg-slate-50 rounded-xl border border-slate-200">
+                            ${yGrid}
+                            ${xLabels}
+                            ${linesAndPoints}
+                        </svg>
+                        <div class="absolute top-2 right-2 flex flex-wrap gap-2 sm:gap-4 bg-white/90 px-3 py-2 sm:px-4 sm:py-2 rounded-lg sm:rounded-full shadow-sm backdrop-blur-sm border border-slate-100 max-w-[90%] justify-end">
+                            ${legendHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function renderResults() {
+            const container = document.getElementById('results-container');
+            if (!state.results) {
+                container.innerHTML = '';
+                return;
+            }
+
+            const r = state.results;
+
+            let passwordSection = !state.isChartUnlocked ? `
+                <div class="bg-white border-2 border-dashed border-slate-300 rounded-2xl p-6 sm:p-8 text-center mb-8 shadow-sm">
+                    <div class="bg-slate-100 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i data-lucide="lock" class="w-8 h-8 text-slate-400"></i>
+                    </div>
+                    <h4 class="text-lg sm:text-xl font-bold text-slate-800 mb-2">Mở khóa Biểu đồ Toàn cảnh</h4>
+                    <p class="text-sm sm:text-base text-slate-500 mb-6 max-w-md mx-auto">Nhập mật khẩu để xem phân tích biểu đồ biến thiên ngũ hành của tất cả mọi người.</p>
+                    <div class="flex flex-col sm:flex-row justify-center items-center gap-3 w-full max-w-sm mx-auto">
+                        <input type="password" id="password-input" placeholder="Nhập mật khẩu..." value="${state.passwordInput}" 
+                            class="px-4 py-3 border border-slate-300 rounded-xl focus:ring-2 focus:ring-sky-500 outline-none w-full sm:w-64 text-center text-lg shadow-inner transition-shadow" />
+                        <button id="btn-unlock" class="w-full sm:w-auto px-6 py-3 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl flex items-center justify-center gap-2 transition-all active:scale-95 shadow-md">
+                            <i data-lucide="unlock" class="w-5 h-5"></i> Mở
+                        </button>
+                    </div>
+                </div>
+            ` : '';
+
+            let tablesSection = `
+                <div class="grid grid-cols-1 xl:grid-cols-2 gap-6 sm:gap-8 items-start">
+                    ${r.compiledData.map(dataObj => {
+
+                // Định lượng rows
+                let quantRows = Object.keys(NGU_HANH_COLORS).map(el => `
+                            <tr class="border-b border-slate-300 hover:bg-sky-50 transition-colors">
+                                <td class="p-3 sm:p-4 font-bold sticky left-0 bg-white z-10 border-r-2 border-slate-300 shadow-[2px_0_5px_rgba(0,0,0,0.05)]" style="color: ${NGU_HANH_COLORS[el]}">${el}</td>
+                                ${dataObj.dataList.map((d, i) => `
+                                    <td class="p-3 sm:p-4 text-slate-600 whitespace-nowrap min-w-[80px]
+                                        ${r.timeLabels[i].year % 2 === 0 ? 'bg-sky-50/50' : 'bg-orange-50/50'} 
+                                        ${i > 0 && r.timeLabels[i - 1].year !== r.timeLabels[i].year ? 'border-l-2 border-slate-400' : 'border-l border-slate-300'}">
+                                        ${d.quantitative[el]}
+                                    </td>
+                                `).join('')}
+                            </tr>
+                        `).join('');
+
+                // Định tính rows
+                let qualRows = Object.keys(NGU_HANH_COLORS).map(el => `
+                            <tr class="border-b border-slate-300 hover:bg-sky-50 transition-colors">
+                                <td class="p-3 sm:p-4 font-bold sticky left-0 bg-white z-10 border-r-2 border-slate-300 shadow-[2px_0_5px_rgba(0,0,0,0.05)]" style="color: ${NGU_HANH_COLORS[el]}">${el}</td>
+                                ${dataObj.dataList.map((d, i) => `
+                                    <td class="p-3 sm:p-4 text-slate-600 whitespace-nowrap min-w-[80px]
+                                        ${r.timeLabels[i].year % 2 === 0 ? 'bg-sky-50/50' : 'bg-orange-50/50'} 
+                                        ${i > 0 && r.timeLabels[i - 1].year !== r.timeLabels[i].year ? 'border-l-2 border-slate-400' : 'border-l border-slate-300'}">
+                                        ${d.qualitative[el] || "-"}
+                                    </td>
+                                `).join('')}
+                            </tr>
+                        `).join('');
+
+                let chartHTML = state.isChartUnlocked ? `
+                            <div class="pt-6 border-t border-slate-300 animate-fade-in-up duration-500">
+                                <h4 class="font-bold text-slate-800 mb-4 flex items-center gap-2 text-lg">
+                                    <i data-lucide="bar-chart-2" class="w-6 h-6 text-sky-500"></i> Biểu đồ biến thiên
+                                </h4>
+                                ${generateSVGChart(r.timeLabels, dataObj.dataList, r.colLabel)}
+                            </div>
+                        ` : '';
+
+                return `
+                            <div class="w-full bg-white rounded-2xl shadow-sm border-2 border-sky-100 p-4 sm:p-6 relative mt-6">
+                                <div class="absolute -top-5 left-4 sm:left-6 bg-gradient-to-r from-sky-600 to-blue-600 text-white px-4 sm:px-6 py-2 rounded-full font-bold shadow-lg shadow-blue-200 flex items-center gap-2 max-w-[90%] overflow-hidden text-ellipsis whitespace-nowrap">
+                                    <i data-lucide="user" class="w-4 h-4 flex-shrink-0"></i> 
+                                    <span class="truncate">${dataObj.person.displayName}</span> 
+                                    <span class="text-sky-200 font-normal flex-shrink-0 text-sm">(${dataObj.person.d}/${dataObj.person.m}/${dataObj.person.y})</span>
+                                </div>
+                                
+                                <div class="mt-6 space-y-6">
+                                    <div class="overflow-x-auto rounded-xl border-2 border-slate-300 shadow-sm">
+                                        <table class="w-full text-sm sm:text-base text-center">
+                                            <thead class="bg-slate-800 text-white border-b-2 border-slate-600">
+                                                <tr>
+                                                    <th class="p-3 sm:p-4 sticky left-0 bg-slate-800 z-20 border-r-2 border-slate-600 whitespace-nowrap shadow-[2px_0_5px_rgba(0,0,0,0.1)]">Định lượng</th>
+                                                    ${r.timeLabels.map((h, i) => `
+                                                        <th class="p-3 sm:p-4 whitespace-nowrap font-semibold ${i > 0 && r.timeLabels[i - 1].year !== h.year ? 'border-l-2 border-slate-400' : 'border-l border-slate-600'}">
+                                                            ${r.colLabel} ${h.text}
+                                                        </th>
+                                                    `).join('')}
+                                                </tr>
+                                            </thead>
+                                            <tbody>${quantRows}</tbody>
+                                        </table>
+                                    </div>
+
+                                    <div class="overflow-x-auto rounded-xl border-2 border-slate-300 shadow-sm">
+                                        <table class="w-full text-sm sm:text-base text-center">
+                                            <thead class="bg-slate-600 text-white border-b-2 border-slate-500">
+                                                <tr>
+                                                    <th class="p-3 sm:p-4 sticky left-0 bg-slate-700 z-20 border-r-2 border-slate-500 whitespace-nowrap shadow-[2px_0_5px_rgba(0,0,0,0.1)]">Định tính</th>
+                                                    ${r.timeLabels.map((h, i) => `
+                                                        <th class="p-3 sm:p-4 whitespace-nowrap font-semibold ${i > 0 && r.timeLabels[i - 1].year !== h.year ? 'border-l-2 border-slate-400' : 'border-l border-slate-500'}">
+                                                            ${r.colLabel} ${h.text}
+                                                        </th>
+                                                    `).join('')}
+                                                </tr>
+                                            </thead>
+                                            <tbody>${qualRows}</tbody>
+                                        </table>
+                                    </div>
+
+                                    ${chartHTML}
+                                </div>
+                            </div>
+                        `;
+            }).join('')}
                 </div>
             `;
 
-            let chartTasks = [];
+            let matrixSectionHTML = r.globalDatesStr.map((dateStr, timeIdx) => {
+                const yearStr = dateStr.includes('/') ? dateStr.split('/')[1] : dateStr;
+                const yearNum = parseInt(yearStr);
+                const prefix = r.type === 'Month' ? 'THÁNG' : 'NĂM';
 
-            blocks.forEach((block, index) => {
-                const pId = index + 1;
-                const d = parseInt(block.querySelector('.p-day').value);
-                const m = parseInt(block.querySelector('.p-month').value);
-                const y = parseInt(block.querySelector('.p-year').value);
-                const name = block.querySelector('.p-name').value || `Người ${pId}`;
+                const isEven = yearNum % 2 === 0;
+                const btnClass = isEven ? 'bg-sky-50 border-l-4 border-l-sky-500 hover:bg-sky-100' : 'bg-orange-50 border-l-4 border-l-orange-500 hover:bg-orange-100';
+                const iconClass = isEven ? 'text-sky-600' : 'text-orange-600';
 
-                if (!d || !m || !y) {
-                    alert(`Vui lòng nhập đủ Ngày/Tháng/Năm sinh cho ${name}!`);
-                    return;
-                }
+                const childrenHtml = r.compiledData.map(personObj => {
+                    const num = personObj.dataList[timeIdx].originalNumbers;
+                    const quant = personObj.dataList[timeIdx].quantitative;
 
-                let datesResult = [], headers = [], dataList = [];
-                let label = tabType === 'Month' ? (extraYearsMonth > 0 ? "" : "Tháng") : "";
+                    // Sắp xếp giảm dần theo số lượng để thẻ đẹp hơn
+                    const sortedElements = Object.keys(NGU_HANH_COLORS).map(k => ({ n: k, v: quant[k], c: NGU_HANH_COLORS[k] })).sort((a, b) => b.v - a.v);
 
-                if (tabType === 'Month') {
-                    for (let year = timeData.tYear; year <= timeData.tYear + extraYearsMonth; year++) {
-                        let startM = (year === timeData.tYear) ? timeData.sMonth : 1;
-                        let endM = (year === timeData.tYear + extraYearsMonth) ? timeData.eMonth : 12;
-                        for (let month = startM; month <= endM; month++) {
-                            datesResult.push(`${d}/${month}/${year}`);
-                            // Đẩy object chứa cả text hiển thị và năm vào headers
-                            headers.push({
-                                text: extraYearsMonth > 0 ? `${month}/${year}` : month,
-                                year: year
-                            });
-                            dataList.push(calculateElementsForDate(d, month, year));
-                        }
-                    }
-                } else {
-                    for (let year = timeData.sYear; year <= timeData.eYear; year++) {
-                        datesResult.push(`${d}/${m}/${year}`);
-                        // Đẩy object chứa cả text hiển thị và năm vào headers
-                        headers.push({
-                            text: year,
-                            year: year
-                        });
-                        dataList.push(calculateElementsForDate(d, m, year));
-                    }
-                }
+                    // Khung ma trận 3x3: Viền mỏng 1px, nền trắng, đồng nhất 1 kích thước chữ
+                    const gridBoxes = [3, 6, 9, 2, 5, 8, 1, 4, 7].map(boxKey => {
+                        const val = num[boxKey] || "";
+                        // Khóa cứng 1 kích thước chữ cho tất cả các ô, không tự động thu nhỏ nữa
+                        const textSizeClass = 'text-2xl sm:text-3xl';
 
-                const canvasId = `chart_${tabType}_${pId}`;
-                chartTasks.push({ id: canvasId, headers, dataList, label });
+                        return `
+                        <div class="bg-white w-full h-full flex items-center justify-center ${textSizeClass} font-black text-slate-800 transition-colors hover:bg-slate-50 cursor-default p-1 break-all text-center leading-tight tracking-tight">
+                            ${val}
+                        </div>
+                        `;
+                    }).join('');
 
-                globalHtml += `
-                <div class="person-result-box">
-                    <h2 class="person-result-title">👤 ${name} (${d}/${m}/${y})</h2>
-                    ${buildSummaryTablesHTML(headers, dataList, label)}
-                    
-                    <div class="chart-wrapper" style="display: ${isChartUnlocked ? 'block' : 'none'};">
-                        <div class="chart-container-inner"><canvas id="${canvasId}"></canvas></div>
+                    const sortedHTML = sortedElements.map(el => `
+                        <div class="text-center flex-1 px-1">
+                            <span class="block text-2xl sm:text-3xl font-black mb-1.5" style="color: ${el.c}">${el.v}</span>
+                            <span class="text-xs sm:text-sm font-bold uppercase tracking-wider" style="color: ${el.c}">${el.n}</span>
+                        </div>
+                    `).join('');
+
+                    return `
+                        <div class="bg-white p-5 sm:p-7 rounded-2xl border border-slate-200 min-w-[280px] sm:min-w-[340px] max-w-[400px] w-full shrink-0 hover:shadow-lg transition-shadow flex flex-col h-full shadow-sm">
+                            <div class="text-center text-lg sm:text-xl font-bold text-sky-700 border-b border-dashed border-slate-300 pb-4 mb-6 flex items-center justify-center gap-2">
+                                <i data-lucide="user" class="w-5 h-5"></i> <span class="truncate max-w-[220px]">${personObj.person.displayName}</span>
+                            </div>
+                            
+                            <div class="flex-grow flex items-center justify-center mb-6">
+                                <div class="w-[200px] h-[200px] sm:w-[240px] sm:h-[240px] mx-auto border border-slate-300 rounded-xl overflow-hidden shadow-sm">
+                                    <div class="grid grid-cols-3 grid-rows-3 gap-[1px] w-full h-full bg-slate-300">
+                                        ${gridBoxes}
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-auto flex justify-between items-center bg-white p-4 sm:p-5 rounded-xl border border-slate-100 shadow-[0_0_10px_rgba(0,0,0,0.04)] ring-1 ring-slate-50">
+                                ${sortedHTML}
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+
+                return `
+                    <div class="mb-6 rounded-2xl overflow-hidden shadow-sm border border-slate-200 bg-white">
+                        <button class="accordion-toggle w-full flex justify-between items-center p-4 sm:p-5 transition-colors duration-200 active:bg-slate-50 ${btnClass}">
+                            <span class="font-bold text-slate-800 flex items-center gap-3 text-sm sm:text-base">
+                                <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6 flex-shrink-0 ${iconClass}"></i>
+                                HUYỀN CƠ ${prefix}: ${dateStr}
+                            </span>
+                            <div class="bg-white/50 p-1 rounded-full shadow-sm">
+                                <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 sm:w-6 sm:h-6 text-slate-600"></i>
+                            </div>
+                        </button>
+                        <div class="hidden accordion-content p-5 sm:p-8 bg-slate-50/50 border-t border-slate-100 overflow-x-auto custom-scrollbar">
+                            <!-- Căn giữa (md:justify-center) khi có ít người, giãn đều khoảng cách -->
+                            <div class="flex gap-6 sm:gap-10 pb-4 items-stretch md:justify-center min-w-min">
+                                ${childrenHtml}
+                            </div>
+                        </div>
                     </div>
+                `;
+            }).join('');
+
+            container.innerHTML = `
+                <div class="animate-fade-in-up">
+                    ${passwordSection}
+                    ${tablesSection}
                     
-                    <div style="margin-top: 1rem;">
-                        ${buildMatrixDetails(datesResult, dataList)}
+                    <div class="mt-12 sm:mt-16">
+                        <h2 class="text-xl sm:text-2xl font-bold text-slate-800 mb-6 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-3">
+                            <i data-lucide="sparkles" class="w-6 h-6 sm:w-8 sm:h-8 text-sky-600"></i> Chi Tiết Huyền Cơ So Sánh
+                        </h2>
+                        <div class="space-y-4">
+                            ${matrixSectionHTML}
+                        </div>
                     </div>
-                </div>`;
-            });
-
-            document.getElementById(`resultGlobal${tabType}`).innerHTML = globalHtml;
-
-            // Vẽ biểu đồ
-            chartTasks.forEach(task => {
-                drawChart(task.id, task.headers, task.dataList, task.label);
-            });
+                </div>
+            `;
+            lucide.createIcons();
         }
-        // --- HÀM GỌI KẾT QUẢ CHÍNH (XỬ LÝ ĐA NGƯỜI DÙNG) ---
+
+        // --- HANDLERS ---
+        function handleGenerate() {
+            const isMonth = state.activeTab === 'Month';
+            const currentPeople = isMonth ? state.peopleMonth : state.peopleYear;
+
+            if (currentPeople.length === 0) return alert("Vui lòng thêm ít nhất 1 người!");
+            if (currentPeople.some(p => !p.d || !p.m || !p.y)) return alert("Vui lòng nhập đủ Ngày/Tháng/Năm sinh cho tất cả mọi người!");
+
+            let timeLabels = [];
+            let globalDatesStr = [];
+
+            if (isMonth) {
+                const sM = parseInt(state.monthStart) || 1;
+                const eM = parseInt(state.monthEnd) || 12;
+                const tY = parseInt(state.monthTargetYear);
+                if (!tY) return alert("Vui lòng nhập năm muốn xét!");
+
+                for (let year = tY; year <= tY + state.extraYearsMonth; year++) {
+                    let startM = (year === tY) ? sM : 1;
+                    let endM = (year === tY + state.extraYearsMonth) ? eM : 12;
+                    for (let month = startM; month <= endM; month++) {
+                        timeLabels.push({ text: state.extraYearsMonth > 0 ? `${month}/${year}` : month, year: year });
+                        globalDatesStr.push(`${month}/${year}`);
+                    }
+                }
+            } else {
+                const sY = parseInt(state.yearStart);
+                const eY = parseInt(state.yearEnd);
+                if (!sY || !eY || sY > eY) return alert("Năm bắt đầu/kết thúc không hợp lệ!");
+
+                for (let year = sY; year <= eY; year++) {
+                    timeLabels.push({ text: year, year: year });
+                    globalDatesStr.push(`${year}`);
+                }
+            }
+
+            const compiledData = currentPeople.map((p, idx) => {
+                const name = p.name || `Người ${idx + 1}`;
+                const dataList = timeLabels.map(labelInfo => {
+                    let calcMonth = parseInt(p.m);
+                    let calcYear = labelInfo.year;
+
+                    if (isMonth) {
+                        calcMonth = typeof labelInfo.text === 'string' && labelInfo.text.includes('/')
+                            ? parseInt(labelInfo.text.split('/')[0])
+                            : parseInt(labelInfo.text);
+                    }
+                    return calculateElementsForDate(parseInt(p.d), calcMonth, calcYear);
+                });
+
+                return { person: { ...p, displayName: name }, dataList };
+            });
+
+            state.results = {
+                type: state.activeTab,
+                timeLabels,
+                globalDatesStr,
+                compiledData,
+                colLabel: isMonth && state.extraYearsMonth === 0 ? "Tháng" : ""
+            };
+
+            renderResults();
+        }
+
+        function unlockCharts() {
+            if (state.passwordInput === '3131') {
+                state.isChartUnlocked = true;
+                renderResults();
+            } else {
+                alert('Mật khẩu không chính xác!');
+            }
+        }
+
+        // --- EVENT LISTENERS ---
+        document.addEventListener('DOMContentLoaded', () => {
+            loadFromCache();
+            renderTabs();
+            renderTimeForm();
+            renderPeopleList();
+            lucide.createIcons();
+        });
+
+        document.getElementById('app').addEventListener('click', (e) => {
+            // TABS
+            if (e.target.closest('#tab-month') && state.activeTab !== 'Month') {
+                state.activeTab = 'Month';
+                state.results = null;
+                renderTabs(); renderTimeForm(); renderPeopleList(); renderResults();
+            }
+            if (e.target.closest('#tab-year') && state.activeTab !== 'Year') {
+                state.activeTab = 'Year';
+                state.results = null;
+                renderTabs(); renderTimeForm(); renderPeopleList(); renderResults();
+            }
+
+            // EXTRA YEAR BUTTONS
+            if (e.target.closest('#btn-plus-year')) {
+                state.extraYearsMonth++;
+                renderTimeForm();
+            }
+            if (e.target.closest('#btn-minus-year')) {
+                state.extraYearsMonth = Math.max(0, state.extraYearsMonth - 1);
+                renderTimeForm();
+            }
+
+            // ADD PERSON
+            if (e.target.closest('#btn-add-person')) {
+                if (state.activeTab === 'Month') {
+                    state.peopleMonth.push({ id: Date.now(), d: '', m: '', y: '', name: '' });
+                } else {
+                    state.peopleYear.push({ id: Date.now(), d: '', m: '', y: '', name: '' });
+                }
+                savePeopleToCache();
+                renderPeopleList();
+            }
+
+            // REMOVE PERSON
+            if (e.target.closest('.btn-remove-person')) {
+                const id = Number(e.target.closest('.btn-remove-person').dataset.id);
+                if (state.activeTab === 'Month') {
+                    state.peopleMonth = state.peopleMonth.filter(p => p.id !== id);
+                } else {
+                    state.peopleYear = state.peopleYear.filter(p => p.id !== id);
+                }
+                savePeopleToCache();
+                renderPeopleList();
+            }
+
+            // GENERATE
+            if (e.target.closest('#btn-generate')) {
+                handleGenerate();
+            }
+
+            // UNLOCK CHART
+            if (e.target.closest('#btn-unlock')) {
+                unlockCharts();
+            }
+
+            // ACCORDION TOGGLE
+            if (e.target.closest('.accordion-toggle')) {
+                const btn = e.target.closest('.accordion-toggle');
+                const content = btn.nextElementSibling;
+                const icon = btn.querySelector('.accordion-icon');
+
+                if (content.classList.contains('hidden')) {
+                    content.classList.remove('hidden');
+                    icon.setAttribute('data-lucide', 'chevron-up');
+                } else {
+                    content.classList.add('hidden');
+                    icon.setAttribute('data-lucide', 'chevron-down');
+                }
+                lucide.createIcons();
+            }
+        });
+
+        // Event delegation for Inputs (tránh re-render làm mất focus)
+        document.getElementById('app').addEventListener('input', (e) => {
+            if (e.target.matches('.time-input')) {
+                const field = e.target.dataset.field;
+                state[field] = e.target.value;
+                saveTimeToCache();
+            }
+
+            if (e.target.matches('.person-input')) {
+                const id = Number(e.target.dataset.id);
+                const field = e.target.dataset.field;
+                const list = state.activeTab === 'Month' ? state.peopleMonth : state.peopleYear;
+                const person = list.find(p => p.id === id);
+                if (person) {
+                    person[field] = e.target.value;
+                    savePeopleToCache();
+                }
+            }
+
+            if (e.target.matches('#password-input')) {
+                state.passwordInput = e.target.value;
+            }
+        });
+
+        document.getElementById('app').addEventListener('keydown', (e) => {
+            if (e.target.matches('#password-input') && e.key === 'Enter') {
+                unlockCharts();
+            }
+        });
 
     </script>
 </body>
