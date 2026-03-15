@@ -498,23 +498,20 @@
                     const gridBoxes = [3, 6, 9, 2, 5, 8, 1, 4, 7].map(boxKey => {
                         const val = num[boxKey] || "";
 
-                        // Tự động điều chỉnh size chữ dựa trên độ dài của số
-                        let textSizeClass = 'text-xl sm:text-3xl';
-                        if (val.length >= 4) textSizeClass = 'text-sm sm:text-lg';
-                        else if (val.length === 3) textSizeClass = 'text-base sm:text-xl';
-                        else if (val.length === 2) textSizeClass = 'text-lg sm:text-2xl';
+                        // ĐÃ SỬA: Khóa cứng 1 kích thước chữ cho mọi con số, nhỏ hơn 30% so với bản cũ
+                        const textSizeClass = 'text-[14px] sm:text-[21px]';
 
                         return `
-                        <div class="bg-white w-full h-full flex items-center justify-center ${textSizeClass} font-black text-slate-800 transition-colors hover:bg-slate-50 cursor-default p-0.5 sm:p-1 break-all text-center leading-none tracking-tight overflow-hidden">
+                        <div class="bg-white w-full h-full flex items-center justify-center ${textSizeClass} font-black text-slate-800 transition-colors hover:bg-slate-50 cursor-default p-1 break-all text-center leading-tight tracking-tight overflow-hidden">
                             ${val}
                         </div>
                         `;
                     }).join('');
 
-                    // MỚI: Thêm border, padding và background cho từng thẻ ngũ hành
+                    // MỚI: Thêm border, padding và background cho từng thẻ ngũ hành (cũng giảm số nhỏ lại xíu cho cân đối)
                     const sortedHTML = sortedElements.map(el => `
-                        <div class="text-center flex-1 border border-slate-200 rounded-lg py-2 sm:py-3 bg-slate-50 shadow-sm hover:bg-slate-100 transition-colors">
-                            <span class="block text-lg sm:text-2xl font-black mb-0.5 sm:mb-1" style="color: ${el.c}">${el.v}</span>
+                        <div class="text-center flex-1 border border-slate-200 rounded-lg py-1.5 sm:py-2 bg-slate-50 shadow-sm hover:bg-slate-100 transition-colors">
+                            <span class="block text-base sm:text-xl font-black mb-0.5" style="color: ${el.c}">${el.v}</span>
                             <span class="text-[10px] sm:text-xs font-bold uppercase tracking-wider" style="color: ${el.c}">${el.n}</span>
                         </div>
                     `).join('');
