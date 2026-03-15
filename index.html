@@ -37,8 +37,8 @@
 
         /* Tùy chỉnh thanh cuộn (Scrollbar) cho giao diện sạch hơn */
         ::-webkit-scrollbar {
-            width: 6px;
-            height: 6px;
+            width: 8px;
+            height: 8px;
         }
 
         ::-webkit-scrollbar-track {
@@ -551,8 +551,8 @@
                                 <i data-lucide="chevron-down" class="accordion-icon w-5 h-5 sm:w-6 sm:h-6 text-slate-600"></i>
                             </div>
                         </button>
-                        <div class="hidden accordion-content p-4 sm:p-8 bg-slate-50/50 border-t border-slate-100 lg:overflow-x-auto lg:custom-scrollbar">
-                            <div class="flex flex-col lg:flex-row gap-6 sm:gap-8 pb-4 items-center lg:items-stretch lg:justify-center lg:min-w-max">
+                        <div class="hidden accordion-content p-4 sm:p-8 bg-slate-50/50 border-t border-slate-100 overflow-x-auto custom-scrollbar">
+                            <div class="flex flex-col lg:flex-row gap-6 sm:gap-8 pb-4 items-center lg:items-stretch justify-start w-full lg:w-max">
                                 ${childrenHtml}
                             </div>
                         </div>
