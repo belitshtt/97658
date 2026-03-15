@@ -585,6 +585,19 @@
             if (currentPeople.length === 0) return alert("Vui lòng thêm ít nhất 1 người!");
             if (currentPeople.some(p => !p.d || !p.m || !p.y)) return alert("Vui lòng nhập đủ Ngày/Tháng/Năm sinh cho tất cả mọi người!");
 
+            // Kiểm tra ngày sinh có tồn tại thực tế không
+            const checkValid = (d, m, y) => {
+                const dt = new Date(y, m - 1, d);
+                return dt.getFullYear() == y && dt.getMonth() == m - 1 && dt.getDate() == d;
+            };
+            for (let i = 0; i < currentPeople.length; i++) {
+                const p = currentPeople[i];
+                if (!checkValid(p.d, p.m, p.y)) {
+                    alert(`Người thứ ${i + 1} (${p.name || 'N/A'}) có ngày sinh ${p.d}/${p.m}/${p.y} không hợp lệ thực tế!`);
+                    return;
+                }
+            }
+
             let timeLabels = [];
             let globalDatesStr = [];
 
@@ -733,7 +746,20 @@
         });
 
         // Event delegation for Inputs
+        // Event delegation for Inputs - Đã thêm ràng buộc Ngày/Tháng
         document.getElementById('app').addEventListener('input', (e) => {
+            if (e.target.type === 'number') {
+                let val = parseInt(e.target.value);
+                const field = e.target.dataset.field;
+                if (field === 'd') {
+                    if (val < 1) e.target.value = 1;
+                    if (val > 31) e.target.value = 31;
+                } else if (field === 'm' || field === 'monthStart') {
+                    if (val < 1) e.target.value = 1;
+                    if (val > 12) e.target.value = 12;
+                }
+            }
+
             if (e.target.matches('.time-input')) {
                 const field = e.target.dataset.field;
                 state[field] = e.target.value;
