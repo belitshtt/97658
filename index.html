@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -59,6 +60,47 @@
         .input-ring-custom:focus-within {
             box-shadow: 0 0 0 2px #0ea5e9, 0 0 0 4px rgba(14, 165, 233, 0.2);
         }
+
+        /* --- Huyền Danh Luận: tab bổ sung, không can thiệp logic Matrix tháng/năm --- */
+        .hdl-table-wrap {
+            overflow-x: auto;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            background: #fff;
+        }
+
+        .hdl-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: #fff;
+        }
+
+        .hdl-table th,
+        .hdl-table td {
+            padding: 0.875rem 1rem;
+            border-bottom: 1px solid #e2e8f0;
+            text-align: center;
+            font-size: 0.95rem;
+            vertical-align: middle;
+        }
+
+        .hdl-table th {
+            background: #f8fafc;
+            color: #475569;
+            font-weight: 700;
+            text-transform: none;
+        }
+
+        .hdl-table th:first-child,
+        .hdl-table td:first-child {
+            text-align: left;
+            font-weight: 700;
+        }
+
+        .hdl-table tr:last-child td {
+            border-bottom: none;
+        }
+
     </style>
 </head>
 
@@ -71,29 +113,74 @@
 
             <div class="bg-white rounded-2xl shadow-sm border border-slate-200 p-4 sm:p-6 mb-8 animate-fade-in-up">
 
-                <h3
-                    class="text-lg sm:text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-2">
-                    <i data-lucide="hourglass" class="w-5 h-5 text-sky-600"></i> Thông tin thời gian
-                </h3>
+                <div id="matrix-panel">
+                    <h3
+                        class="text-lg sm:text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-2">
+                        <i data-lucide="hourglass" class="w-5 h-5 text-sky-600"></i> Thông tin thời gian
+                    </h3>
 
-                <div id="time-form-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8"></div>
+                    <div id="time-form-container" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 mb-8"></div>
 
-                <h3
-                    class="text-lg sm:text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-2">
-                    <i data-lucide="user-plus" class="w-5 h-5 text-sky-600"></i> Danh sách người xem
-                </h3>
+                    <h3
+                        class="text-lg sm:text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-2">
+                        <i data-lucide="user-plus" class="w-5 h-5 text-sky-600"></i> Danh sách người xem
+                    </h3>
 
-                <div id="people-list-container" class="space-y-4 mb-6"></div>
+                    <div id="people-list-container" class="space-y-4 mb-6"></div>
 
-                <button id="btn-add-person"
-                    class="mb-8 w-full sm:w-auto px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-sm shadow-emerald-200 transition-all active:scale-95 flex items-center justify-center sm:justify-start gap-2">
-                    <i data-lucide="user-plus" class="w-5 h-5"></i> Thêm người tra cứu
-                </button>
+                    <button id="btn-add-person"
+                        class="mb-8 w-full sm:w-auto px-5 py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-bold rounded-xl shadow-sm shadow-emerald-200 transition-all active:scale-95 flex items-center justify-center sm:justify-start gap-2">
+                        <i data-lucide="user-plus" class="w-5 h-5"></i> Thêm người tra cứu
+                    </button>
 
-                <button id="btn-generate"
-                    class="w-full py-4 bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg rounded-xl shadow-md shadow-blue-200 transition-all active:scale-[0.98] flex justify-center items-center gap-2 uppercase tracking-wide">
-                    <i data-lucide="sparkles" class="w-6 h-6"></i> KẾT QUẢ
-                </button>
+                    <button id="btn-generate"
+                        class="w-full py-4 bg-gradient-to-r from-sky-600 to-blue-700 hover:from-sky-700 hover:to-blue-800 text-white font-bold text-base sm:text-lg rounded-xl shadow-md shadow-blue-200 transition-all active:scale-[0.98] flex justify-center items-center gap-2 uppercase tracking-wide">
+                        <i data-lucide="sparkles" class="w-6 h-6"></i> KẾT QUẢ
+                    </button>
+                </div>
+
+                <div id="huyen-danh-panel" class="hidden">
+                    <h3
+                        class="text-lg sm:text-xl font-bold text-slate-800 mb-4 pb-2 border-b-2 border-sky-500 inline-flex items-center gap-2">
+                        <i data-lucide="sparkles" class="w-5 h-5 text-sky-600"></i> Huyền Danh Luận
+                    </h3>
+
+                    <div class="grid grid-cols-1 md:grid-cols-[1fr_auto] gap-3 md:gap-4 mb-6">
+                        <input id="hdl-input-name" type="text"
+                            class="w-full p-3 bg-slate-50 border border-slate-200 rounded-lg focus:ring-2 focus:ring-sky-500 outline-none transition-all"
+                            placeholder="Nhập họ tên hoặc chuỗi ký tự, ví dụ: Nguyễn Văn A" />
+                        <div class="flex gap-3">
+                            <button id="btn-hdl-calculate"
+                                class="px-5 py-3 bg-sky-600 hover:bg-sky-700 text-white font-bold rounded-xl shadow-sm shadow-sky-200 transition-all active:scale-95">
+                                Tính toán
+                            </button>
+                            <button id="btn-hdl-clear"
+                                class="px-5 py-3 bg-slate-400 hover:bg-slate-500 text-white font-bold rounded-xl shadow-sm transition-all active:scale-95">
+                                Làm mới
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="hdl-table-wrap">
+                        <table class="hdl-table">
+                            <thead>
+                                <tr>
+                                    <th>Phân loại</th>
+                                    <th>Tự đánh giá</th>
+                                    <th>Giá trị thật</th>
+                                </tr>
+                            </thead>
+                            <tbody id="hdl-table-body">
+                                <tr>
+                                    <td colspan="3" class="text-center text-slate-500 font-normal">
+                                        Nhập họ tên để xem kết quả
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
 
             <div id="results-container"></div>
@@ -217,6 +304,10 @@
                     ${state.activeTab === 'Year' ? 'bg-sky-600 text-white shadow-sky-200' : 'bg-white text-slate-600 hover:bg-sky-50'}">
                     <i data-lucide="calendar" class="w-5 h-5 sm:w-6 sm:h-6"></i> XEM MATRIX NĂM
                 </button>
+                <button id="tab-huyen-danh" class="flex-1 py-3 sm:py-4 px-4 sm:px-6 rounded-xl font-bold text-sm sm:text-lg flex items-center justify-center gap-2 transition-all duration-300 shadow-sm active:scale-95
+                    ${state.activeTab === 'HuyenDanh' ? 'bg-sky-600 text-white shadow-sky-200' : 'bg-white text-slate-600 hover:bg-sky-50'}">
+                    <i data-lucide="sparkles" class="w-5 h-5 sm:w-6 sm:h-6"></i> HUYỀN DANH LUẬN
+                </button>
             `;
             lucide.createIcons();
         }
@@ -296,6 +387,27 @@
             `).join('');
             lucide.createIcons();
         }
+
+        function renderMainPanels() {
+            const matrixPanel = document.getElementById('matrix-panel');
+            const huyenDanhPanel = document.getElementById('huyen-danh-panel');
+            const resultsContainer = document.getElementById('results-container');
+
+            if (!matrixPanel || !huyenDanhPanel) return;
+
+            if (state.activeTab === 'HuyenDanh') {
+                matrixPanel.classList.add('hidden');
+                huyenDanhPanel.classList.remove('hidden');
+                if (resultsContainer) resultsContainer.classList.add('hidden');
+            } else {
+                huyenDanhPanel.classList.add('hidden');
+                matrixPanel.classList.remove('hidden');
+                if (resultsContainer) resultsContainer.classList.remove('hidden');
+            }
+
+            lucide.createIcons();
+        }
+
 
         // SVG Chart Generator Function
         function generateSVGChart(headers, dataList, colLabel) {
@@ -577,6 +689,164 @@
             lucide.createIcons();
         }
 
+
+        // --- HUYỀN DANH LUẬN: công thức theo file gốc, tách riêng để không ảnh hưởng Matrix ---
+        const HDL_PYTHAGORAS_MAP = {
+            A: 1, J: 1, S: 1,
+            B: 2, K: 2, T: 2,
+            C: 3, L: 3, U: 3,
+            D: 4, M: 4, V: 4,
+            E: 5, N: 5, W: 5,
+            F: 6, O: 6, X: 6,
+            G: 7, P: 7, Y: 7,
+            H: 8, Q: 8, Z: 8,
+            I: 9, R: 9
+        };
+
+        const HDL_CATEGORIES = {
+            "Physical": { col1: "E", col2: "W", col3: "DM", col4: "" },
+            "Mental": { col1: "A", col2: "HJNP", col3: "GL", col4: "" },
+            "Emotion": { col1: "IORZ", col2: "BSTX", col3: "", col4: "" },
+            "Intuitive": { col1: "K", col2: "FQUY", col3: "CV", col4: "" },
+            "Create": { col1: "E", col2: "A", col3: "IORZ", col4: "K" },
+            "Dual": { col1: "W", col2: "HJNP", col3: "BSTX", col4: "FQUY" },
+            "Grounded": { col1: "DM", col2: "GL", col3: "CV", col4: "" }
+        };
+
+        function hdlRemoveDiacritics(str) {
+            const diacriticsMap = {
+                'à': 'a', 'á': 'a', 'ả': 'a', 'ã': 'a', 'ạ': 'a',
+                'ă': 'a', 'ằ': 'a', 'ắ': 'a', 'ẳ': 'a', 'ẵ': 'a', 'ặ': 'a',
+                'â': 'a', 'ầ': 'a', 'ấ': 'a', 'ẩ': 'a', 'ẫ': 'a', 'ậ': 'a',
+                'đ': 'd',
+                'è': 'e', 'é': 'e', 'ẻ': 'e', 'ẽ': 'e', 'ẹ': 'e',
+                'ê': 'e', 'ề': 'e', 'ế': 'e', 'ể': 'e', 'ễ': 'e', 'ệ': 'e',
+                'ì': 'i', 'í': 'i', 'ỉ': 'i', 'ĩ': 'i', 'ị': 'i',
+                'ò': 'o', 'ó': 'o', 'ỏ': 'o', 'õ': 'o', 'ọ': 'o',
+                'ô': 'o', 'ồ': 'o', 'ố': 'o', 'ổ': 'o', 'ỗ': 'o', 'ộ': 'o',
+                'ơ': 'o', 'ờ': 'o', 'ớ': 'o', 'ở': 'o', 'ỡ': 'o', 'ợ': 'o',
+                'ù': 'u', 'ú': 'u', 'ủ': 'u', 'ũ': 'u', 'ụ': 'u',
+                'ư': 'u', 'ừ': 'u', 'ứ': 'u', 'ử': 'u', 'ữ': 'u', 'ự': 'u',
+                'ỳ': 'y', 'ý': 'y', 'ỷ': 'y', 'ỹ': 'y', 'ỵ': 'y'
+            };
+
+            return String(str)
+                .toLowerCase()
+                .replace(/[^\u0000-\u007E]/g, char => diacriticsMap[char] || char);
+        }
+
+        function hdlNormalizeLetters(input) {
+            return hdlRemoveDiacritics(input)
+                .toUpperCase()
+                .replace(/[^A-Z\s]/g, " ")
+                .replace(/\s+/g, " ")
+                .trim();
+        }
+
+        function hdlReduceNumber(number) {
+            let currentNumber = Number(number) || 0;
+
+            while (currentNumber > 9) {
+                currentNumber = currentNumber
+                    .toString()
+                    .split("")
+                    .reduce((sum, digit) => sum + parseInt(digit, 10), 0);
+            }
+
+            return currentNumber;
+        }
+
+        function hdlCountLetters(input, validLetters) {
+            if (!validLetters) return 0;
+
+            return Array.from(input)
+                .filter(char => validLetters.includes(char))
+                .length;
+        }
+
+        function hdlSumPythagorean(input, validLetters) {
+            if (!validLetters) return 0;
+
+            return Array.from(input)
+                .filter(char => validLetters.includes(char))
+                .reduce((sum, char) => sum + (HDL_PYTHAGORAS_MAP[char] || 0), 0);
+        }
+
+        function hdlCalculatePersonality(input) {
+            const normalizedInput = hdlNormalizeLetters(input);
+            const tableBody = document.getElementById("hdl-table-body");
+            if (!tableBody) return;
+
+            tableBody.innerHTML = "";
+
+            if (!normalizedInput) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="text-center text-slate-500 font-normal">
+                            Nhập họ tên để xem kết quả
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            Object.entries(HDL_CATEGORIES).forEach(([category, cols]) => {
+                const count1 = hdlSumPythagorean(normalizedInput, cols.col1);
+                const count2 = hdlSumPythagorean(normalizedInput, cols.col2);
+                const count3 = hdlSumPythagorean(normalizedInput, cols.col3);
+                const count4 = hdlSumPythagorean(normalizedInput, cols.col4);
+
+                const selfEvaluation =
+                    hdlCountLetters(normalizedInput, cols.col1) +
+                    hdlCountLetters(normalizedInput, cols.col2) +
+                    hdlCountLetters(normalizedInput, cols.col3) +
+                    hdlCountLetters(normalizedInput, cols.col4);
+
+                const truthValue =
+                    hdlReduceNumber(count1) +
+                    hdlReduceNumber(count2) +
+                    hdlReduceNumber(count3) +
+                    hdlReduceNumber(count4);
+
+                const row = document.createElement("tr");
+                row.innerHTML = `
+                    <td>${category}</td>
+                    <td>${selfEvaluation}</td>
+                    <td>${truthValue}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        function hdlCalculateAll() {
+            const input = document.getElementById("hdl-input-name");
+            if (!input) return;
+
+            if (!input.value.trim()) {
+                alert("Vui lòng nhập họ tên hoặc chuỗi ký tự!");
+                return;
+            }
+
+            hdlCalculatePersonality(input.value);
+        }
+
+        function hdlClear() {
+            const input = document.getElementById("hdl-input-name");
+            const tableBody = document.getElementById("hdl-table-body");
+
+            if (input) input.value = "";
+            if (tableBody) {
+                tableBody.innerHTML = `
+                    <tr>
+                        <td colspan="3" class="text-center text-slate-500 font-normal">
+                            Nhập họ tên để xem kết quả
+                        </td>
+                    </tr>
+                `;
+            }
+        }
+
+
         // --- HANDLERS ---
         function handleGenerate() {
             const isMonth = state.activeTab === 'Month';
@@ -669,6 +939,7 @@
             renderTabs();
             renderTimeForm();
             renderPeopleList();
+            renderMainPanels();
             lucide.createIcons();
         });
 
@@ -677,12 +948,17 @@
             if (e.target.closest('#tab-month') && state.activeTab !== 'Month') {
                 state.activeTab = 'Month';
                 state.results = null;
-                renderTabs(); renderTimeForm(); renderPeopleList(); renderResults();
+                renderTabs(); renderTimeForm(); renderPeopleList(); renderResults(); renderMainPanels();
             }
             if (e.target.closest('#tab-year') && state.activeTab !== 'Year') {
                 state.activeTab = 'Year';
                 state.results = null;
-                renderTabs(); renderTimeForm(); renderPeopleList(); renderResults();
+                renderTabs(); renderTimeForm(); renderPeopleList(); renderResults(); renderMainPanels();
+            }
+            if (e.target.closest('#tab-huyen-danh') && state.activeTab !== 'HuyenDanh') {
+                state.activeTab = 'HuyenDanh';
+                state.results = null;
+                renderTabs(); renderResults(); renderMainPanels();
             }
 
             // EXTRA YEAR BUTTONS
@@ -693,6 +969,15 @@
             if (e.target.closest('#btn-minus-year')) {
                 state.extraYearsMonth = Math.max(0, state.extraYearsMonth - 1);
                 renderTimeForm();
+            }
+
+            // HUYỀN DANH LUẬN
+            if (e.target.closest('#btn-hdl-calculate')) {
+                hdlCalculateAll();
+            }
+
+            if (e.target.closest('#btn-hdl-clear')) {
+                hdlClear();
             }
 
             // ADD PERSON
@@ -780,11 +1065,19 @@
             if (e.target.matches('#password-input')) {
                 state.passwordInput = e.target.value;
             }
+
+            if (e.target.matches('#hdl-input-name')) {
+                hdlCalculatePersonality(e.target.value);
+            }
         });
 
         document.getElementById('app').addEventListener('keydown', (e) => {
             if (e.target.matches('#password-input') && e.key === 'Enter') {
                 unlockCharts();
+            }
+
+            if (e.target.matches('#hdl-input-name') && e.key === 'Enter') {
+                hdlCalculateAll();
             }
         });
 
