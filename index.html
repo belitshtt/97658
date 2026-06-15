@@ -107,16 +107,16 @@
         }
 
       .hdl-category-name {
-            font-family: 'Cookie', cursive; /* Đã đổi sang font Cookie */
-            font-size: 2.2rem !important; /* Tăng size lên một chút cho dễ đọc */
+            font-family: 'Cookie', cursive; 
+            font-size: 1.65rem !important; /* Đã giảm xuống 0.75 */
             line-height: 1.15;
             font-weight: 400 !important;
             color: #7c2d12;
-            letter-spacing: 0.05em; /* Tăng khoảng cách chữ nhẹ cho font Cookie */
+            letter-spacing: 0.05em; 
         }
     .hdl-self-value,
         .hdl-truth-value {
-            font-size: 2.5rem !important; /* Đã hạ xuống mức gấp 1.5 lần */
+            font-size: 1.875rem !important; /* Đã giảm xuống 0.75 */
             line-height: 1;
             font-family: 'Playfair Display', ui-serif, Georgia, serif;
             letter-spacing: 0.02em;
@@ -132,16 +132,22 @@
 
    @media (max-width: 640px) {
             .hdl-table {
-                min-width: 620px;
+                min-width: 100%; /* Đổi thành 100% để vừa khít màn hình, không kéo ngang */
+            }
+
+            /* Thu nhỏ khoảng cách các ô trong bảng để trên mobile không bị chật */
+            .hdl-table th,
+            .hdl-table td {
+                padding: 0.5rem 0.25rem; 
             }
 
             .hdl-category-name {
-                font-size: 1.9rem !important; /* Giữ nguyên cỡ của font Cookie */
+                font-size: 1.05rem !important; /* Đã giảm 0.75 */
             }
 
             .hdl-self-value,
             .hdl-truth-value {
-                font-size: 2.2rem !important; /* Đã hạ xuống mức gấp 1.5 lần */
+                font-size: 1.05rem !important; /* Đã giảm 0.75 */
             }
         }
 
@@ -1128,9 +1134,16 @@
             }
         });
 
-        document.getElementById('app').addEventListener('keydown', (e) => {
+          document.getElementById('app').addEventListener('keydown', (e) => {
+            // Nhấn Enter cho ô mật khẩu mở khóa Biểu đồ
             if (e.target.matches('#password-input') && e.key === 'Enter') {
                 unlockCharts();
+            }
+
+            // Nhấn Enter cho ô nhập tên Huyền Danh Luận
+            if (e.target.matches('#hdl-input-name') && e.key === 'Enter') {
+                e.preventDefault(); // Ngăn chặn hành vi mặc định (ví dụ như reload trang)
+                hdlCalculateAll();  // Gọi hàm tính toán kết quả
             }
         });
 
