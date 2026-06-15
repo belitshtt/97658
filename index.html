@@ -1,5 +1,6 @@
 
 
+
 <!DOCTYPE html>
 <html lang="vi">
 
@@ -7,6 +8,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thần Số Học - Huyền Cơ So Sánh</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cookie&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/lucide@latest"></script>
     <style>
@@ -92,10 +96,53 @@
             text-transform: none;
         }
 
-        .hdl-table th:first-child,
-        .hdl-table td:first-child {
+        .hdl-table th:first-child {
             text-align: left;
-            font-weight: 700;
+            width: 34%;
+            font-weight: 800;
+        }
+
+        .hdl-table tbody td:first-child {
+            text-align: left;
+        }
+
+      .hdl-category-name {
+            font-family: 'Cookie', cursive; /* Đã đổi sang font Cookie */
+            font-size: 2.2rem !important; /* Tăng size lên một chút cho dễ đọc */
+            line-height: 1.15;
+            font-weight: 400 !important;
+            color: #7c2d12;
+            letter-spacing: 0.05em; /* Tăng khoảng cách chữ nhẹ cho font Cookie */
+        }
+    .hdl-self-value,
+        .hdl-truth-value {
+            font-size: 2.5rem !important; /* Đã hạ xuống mức gấp 1.5 lần */
+            line-height: 1;
+            font-family: 'Playfair Display', ui-serif, Georgia, serif;
+            letter-spacing: 0.02em;
+        }
+
+        .hdl-self-value {
+            text-shadow: 0 1px 0 rgba(37, 99, 235, 0.08);
+        }
+
+        .hdl-truth-value {
+            text-shadow: 0 1px 0 rgba(220, 38, 38, 0.08);
+        }
+
+   @media (max-width: 640px) {
+            .hdl-table {
+                min-width: 620px;
+            }
+
+            .hdl-category-name {
+                font-size: 1.9rem !important; /* Giữ nguyên cỡ của font Cookie */
+            }
+
+            .hdl-self-value,
+            .hdl-truth-value {
+                font-size: 2.2rem !important; /* Đã hạ xuống mức gấp 1.5 lần */
+            }
         }
 
         .hdl-table tr:last-child td {
@@ -707,9 +754,9 @@
         const HDL_CATEGORIES = {
             "Physical": { col1: "E", col2: "W", col3: "DM", col4: "" },
             "Mental": { col1: "A", col2: "HJNP", col3: "GL", col4: "" },
-            "Emotion": { col1: "IORZ", col2: "BSTX", col3: "", col4: "" },
+            "Emotional": { col1: "IORZ", col2: "BSTX", col3: "", col4: "" },
             "Intuitive": { col1: "K", col2: "FQUY", col3: "CV", col4: "" },
-            "Create": { col1: "E", col2: "A", col3: "IORZ", col4: "K" },
+            "Creative": { col1: "E", col2: "A", col3: "IORZ", col4: "K" },
             "Dual": { col1: "W", col2: "HJNP", col3: "BSTX", col4: "FQUY" },
             "Grounded": { col1: "DM", col2: "GL", col3: "CV", col4: "" }
         };
@@ -811,9 +858,9 @@
 
                 const row = document.createElement("tr");
                 row.innerHTML = `
-                    <td>${category}</td>
-                    <td class="text-blue-600 font-black">${selfEvaluation}</td>
-                    <td class="text-red-600 font-black">${truthValue}</td>
+                    <td class="hdl-category-name">${category}</td>
+                    <td class="hdl-self-value text-blue-600 font-black">${selfEvaluation}</td>
+                    <td class="hdl-truth-value text-red-600 font-black">${truthValue}</td>
                 `;
                 tableBody.appendChild(row);
             });
